@@ -4,7 +4,7 @@ import { pathnames, localeDetection, localesArray} from './config';
 export default createMiddleware({
   defaultLocale: 'ru',
   locales: localesArray,
-  localePrefix: 'as-needed',
+  localePrefix: 'always',
   localeDetection,
   pathnames
 });
