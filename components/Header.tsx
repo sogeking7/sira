@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/navigation";
 import { Logo } from "./Logo";
 import { PriceCounter } from "./PriceCounter";
 import { usePathname } from "next/navigation";
@@ -11,7 +11,7 @@ import LocaleSwitcher from "./locale/LocaleSwitcher";
 
 interface Props {
   links: NavItem[];
-  locale: string;
+  locale: "kz" | "ru" | "en";
 }
 
 export const Header = ({ links, locale }: Props) => {
@@ -35,7 +35,10 @@ export const Header = ({ links, locale }: Props) => {
                   )}
                   key={item.path}
                 >
-                  <Link locale={locale} href={item.path}>
+                  <Link
+                    // @ts-ignore
+                    href={item.path === "/" ? "/" : `/${item.path}`}
+                  >
                     {item.label}
                   </Link>
                 </li>

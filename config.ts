@@ -23,6 +23,8 @@ export const localeDetection = false;
 
 export const pathnames = {
   '/': '/',
+  '/settings': '/settings',
+  '/donate': '/donate',
 } satisfies Pathnames<typeof localesArray >;
 
 export type AppPathnames = keyof typeof pathnames;

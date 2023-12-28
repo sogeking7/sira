@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/navigation";
 
 export const Logo = () => {
   return (

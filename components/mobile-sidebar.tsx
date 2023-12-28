@@ -9,14 +9,14 @@ import {
 import { Menu } from "lucide-react";
 import { useState } from "react";
 import { Logo } from "./Logo";
-import Link from "next/link";
+import { Link } from "@/navigation";
 import { cn } from "@/lib/utils";
 import { NavItem } from "@/types";
 import LocaleSwitcher from "./locale/LocaleSwitcher";
 
 interface MobileSidebarProps {
   pathname: string;
-  locale: string;
+  locale: "kz" | "ru" | "en";
   links: NavItem[];
 }
 
@@ -49,8 +49,8 @@ export const MobileSidebar = ({
                 key={item.path}
               >
                 <Link
-                  locale={locale}
-                  href={item.path}
+                  // @ts-ignore
+                  href={item.path === "/" ? "/" : `/${item.path}`}
                   onClick={() => setIsOpen(false)}
                 >
                   {item.label}

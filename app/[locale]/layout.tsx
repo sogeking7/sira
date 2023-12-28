@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 
 interface Props {
   children: React.ReactNode;
-  params: { locale: string };
+  params: { locale: "kz" | "ru" | "en" };
 }
 
 export const generateStaticParams = () => localesArray;
