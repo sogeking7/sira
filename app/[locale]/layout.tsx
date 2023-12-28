@@ -6,7 +6,7 @@ import { Inter as FontSans } from "next/font/google";
 import { localesArray } from "@/config";
 import { unstable_setRequestLocale } from "next-intl/server";
 import { NavItem } from "@/types";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 
 export const fontSans = FontSans({
   subsets: ["latin"],
@@ -45,14 +45,9 @@ export default function LocaleLayout({ children, params: { locale } }: Props) {
   ];
 
   return (
-    <html>
+    <html className={cn("font-sans", fontSans.variable)}>
       <body>
-        <div
-          className={cn(
-            "relative min-h-screen bg-background pb-[72px] font-sans antialiased sm:pb-[80px]",
-            fontSans.variable,
-          )}
-        >
+        <div className="relative min-h-screen bg-background pb-[72px]  antialiased sm:pb-[80px]">
           <Header links={links} locale={locale} />
           {children}
           <Footer />
