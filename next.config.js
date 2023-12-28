@@ -1,4 +1,8 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {}
+const i18nConfig = require('./i18n.config');
 
-module.exports = nextConfig
+const nextConfig = {
+  ...i18nConfig,
+};
+
+module.exports = nextConfig;
