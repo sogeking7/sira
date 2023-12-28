@@ -10,7 +10,7 @@ export default function HomePage({ params: { locale } }: Props) {
   unstable_setRequestLocale(locale);
 
   return (
-    <main className="mt-20">
+    <main className="my-20">
       <Hero />
     </main>
   );

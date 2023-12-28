@@ -10,7 +10,7 @@ export default function DonatePage({ params: { locale } }: Props) {
   unstable_setRequestLocale(locale);
   const t = useTranslations();
   return (
-    <main className="m-container mt-6">
+    <main className="m-container mt-6 mb-20">
       <div className="flex flex-col items-center">
         <div>
           <h1 className="text-2xl font-bold sm:text-[32px]">

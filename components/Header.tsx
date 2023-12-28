@@ -11,9 +11,10 @@ import LocaleSwitcher from "./locale/LocaleSwitcher";
 
 interface Props {
   links: NavItem[];
+  locale: string;
 }
 
-export const Header = ({ links }: Props) => {
+export const Header = ({ links, locale }: Props) => {
   const pathname = usePathname();
 
   return (
@@ -34,13 +35,15 @@ export const Header = ({ links }: Props) => {
                   )}
                   key={item.path}
                 >
-                  <Link href={item.path}>{item.label}</Link>
+                  <Link locale={locale} href={item.path}>
+                    {item.label}
+                  </Link>
                 </li>
               ))}
             </ul>
           </nav>
           <div className="h-6 md:!hidden">
-            <MobileSidebar pathname={pathname} links={links} />
+            <MobileSidebar locale={locale} pathname={pathname} links={links} />
           </div>
           <div className="max-md:!hidden">
             <LocaleSwitcher />

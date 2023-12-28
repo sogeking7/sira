@@ -16,10 +16,15 @@ import LocaleSwitcher from "./locale/LocaleSwitcher";
 
 interface MobileSidebarProps {
   pathname: string;
+  locale: string;
   links: NavItem[];
 }
 
-export const MobileSidebar = ({ pathname, links }: MobileSidebarProps) => {
+export const MobileSidebar = ({
+  pathname,
+  links,
+  locale,
+}: MobileSidebarProps) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -43,7 +48,11 @@ export const MobileSidebar = ({ pathname, links }: MobileSidebarProps) => {
                 )}
                 key={item.path}
               >
-                <Link href={item.path} onClick={() => setIsOpen(false)}>
+                <Link
+                  locale={locale}
+                  href={item.path}
+                  onClick={() => setIsOpen(false)}
+                >
                   {item.label}
                 </Link>
               </li>
