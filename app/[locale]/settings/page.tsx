@@ -1,4 +1,4 @@
-import { Input } from "@/components/ui/input";
+import { ChangePassword } from "@/components/change-password/change-password";
 import { useTranslations } from "next-intl";
 import { unstable_setRequestLocale } from "next-intl/server";
 
@@ -8,16 +8,25 @@ type Props = {
 
 export default function SettingsPage({ params: { locale } }: Props) {
   unstable_setRequestLocale(locale);
-  const t = useTranslations("settings");
+  const t = useTranslations();
   return (
     <main className="m-container mb-20 mt-6">
       <div>
         <div>
-          <h1 className="text-2xl font-bold sm:text-[32px]">{t("title")}</h1>
-          <p className="mt-6 sm:text-2xl">{t("desc1")}</p>
-          <p className="mt-6 sm:text-2xl">{t("desc2")}</p>
+          <h1 className="text-2xl font-bold sm:text-[32px]">
+            {t("settings.title")}
+          </h1>
+          <p className="mt-6 sm:text-2xl">{t("settings.desc1")}</p>
+          <p className="mt-6 sm:text-2xl">{t("settings.desc2")}</p>
         </div>
-        <Input className="mt-6" placeholder={t("input")} />
+        <ChangePassword
+          t={{
+            input: t("settings.input"),
+            change: t("change"),
+            phoneNumber: t("settings.phoneNumber"),
+            inputPhone: t("settings.inputPhone"),
+          }}
+        />
       </div>
     </main>
   );

@@ -58,8 +58,8 @@ module.exports = {
         },
       },
       borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
+        lg: "calc(var(--radius) + 8px)",
+        md: "calc(var(--radius))",
         sm: "calc(var(--radius) - 4px)",
       },
       keyframes: {
