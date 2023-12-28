@@ -1,4 +1,5 @@
 import * as React from "react";
+// @ts-ignore
 import InputMask from "react-input-mask";
 import { cn } from "@/lib/utils";
 

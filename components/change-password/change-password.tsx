@@ -13,6 +13,7 @@ import {
 import { ChevronRight } from "lucide-react";
 import { useState } from "react";
 import { ChangePasswordForm } from "./change-password-form";
+import Image from "next/image";
 
 interface Props {
   t: any;
@@ -30,7 +31,7 @@ export const ChangePassword = ({ t }: Props) => {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[312px]">
         <DialogHeader className="items-center">
-          <img src="/icons/phone.svg" className="h-16 w-16" />
+          <Image alt="phone" src="/icons/phone.svg" className="h-16 w-16" />
           <DialogTitle>{t.phoneNumber}</DialogTitle>
           <DialogDescription>{t.inputPhone}</DialogDescription>
         </DialogHeader>

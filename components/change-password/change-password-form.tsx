@@ -52,6 +52,7 @@ export const ChangePasswordForm = ({ t }: Props) => {
               <FormControl>
                 <Input
                   type="tel"
+                  // @ts-ignore
                   mask="+7 (999)-999-99-99"
                   placeholder="+7 (___)-___-__-__"
                   {...field}

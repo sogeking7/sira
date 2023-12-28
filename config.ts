@@ -16,9 +16,10 @@ export const locales = [
 ] as const;
 
 // Use the default: `always`
-export const localePrefix = undefined;
+export const localePrefix = 'as-needed';
 
 export const localesArray = locales.map(({value}) => value)
+export const localeDetection = false;
 
 export const pathnames = {
   '/': '/',
