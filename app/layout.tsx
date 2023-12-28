@@ -21,17 +21,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen relative">
+    <html lang="ru">
       <body
         className={cn(
-          "min-h-screen bg-background font-sans antialiased",
-          fontSans.variable
+          "relative min-h-screen bg-background font-sans antialiased",
+          fontSans.variable,
         )}
       >
         <Header />
         {children}
         <Footer />
       </body>
-    </div>
+    </html>
   );
 }
