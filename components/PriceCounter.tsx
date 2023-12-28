@@ -5,7 +5,7 @@ export const PriceCounter = () => {
   const [count, setCount] = useState(0);
   return (
     <div className="font-semibold">
-      <img src="/icons/prize.png" className="inline" /> {count}/10
+      <img src="/icons/prize.svg" className="inline" /> {count}/10
     </div>
   );
 };
