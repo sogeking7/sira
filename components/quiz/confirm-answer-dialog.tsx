@@ -57,7 +57,7 @@ export const ConfirmAnswerDialog = ({
     <Dialog open={open} onOpenChange={setIsOpen} defaultOpen={false}>
       <DialogContent className="sm:max-w-[312px]">
         <DialogHeader className="items-center">
-          <img src="/icons/question.svg" className="h-16 w-16" />
+          <img src="/icons/question.svg" />
           <DialogTitle>Подтвердите ваш выбор</DialogTitle>
           <DialogDescription>
             Вы уверены что хотите выбрать этот вариант?

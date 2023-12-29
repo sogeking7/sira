@@ -28,7 +28,7 @@ export const ChangePassword = ({ t }: Props) => {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[312px]">
         <DialogHeader className="items-center">
-          <img src="/icons/phone.svg" className="h-16 w-16" />
+          <img src="/icons/phone.svg" />
           <DialogTitle>{t.phoneNumber}</DialogTitle>
           <DialogDescription>{t.inputPhone}</DialogDescription>
         </DialogHeader>

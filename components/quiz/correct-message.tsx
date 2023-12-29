@@ -35,7 +35,7 @@ export const CorrectMessage = ({ title, setStatus, setProgress }: Props) => {
   return (
     <div className="mb-[200px] mt-12">
       <div className="flex flex-col items-center">
-        <img src="/icons/tick-round.svg" className="h-12 w-12" />
+        <img src="/icons/tick-round.svg" />
         <h1 className="mt-12 text-center text-[20px] font-bold leading-tight sm:text-2xl">
           Какой из ниже перечисленных ответов правильный?
         </h1>
