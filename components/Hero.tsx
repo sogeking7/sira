@@ -1,3 +1,4 @@
+import { Link } from "@/navigation";
 import { Button } from "./ui/button";
 import { useTranslations } from "next-intl";
 
@@ -8,7 +9,9 @@ export const Hero = () => {
       <img src="/icons/moon.svg" className="h-24 w-24 rotate-90" />
       <h1 className="text-2xl font-bold sm:text-[32px]">{t("hero.title")}</h1>
       <p className="text-base sm:text-2xl">{t("hero.description")}</p>
-      <Button className="w-full sm:w-[312px]">{t("start")}</Button>
+      <Link href="/quiz" className="w-full rounded-md sm:w-[312px]">
+        <Button className="w-full">{t("start")}</Button>
+      </Link>
     </div>
   );
 };

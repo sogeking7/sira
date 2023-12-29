@@ -1,8 +1,8 @@
 "use client";
-import { useState } from "react";
+import { usePrizeStore } from "@/hooks/prize";
 
-export const PriceCounter = () => {
-  const [count, setCount] = useState(0);
+export const PrizeCounter = () => {
+  const { count } = usePrizeStore();
   return (
     <div className="font-semibold">
       <img src="/icons/prize.svg" className="inline" /> {count}/10

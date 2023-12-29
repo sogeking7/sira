@@ -2,7 +2,7 @@
 
 import { Link } from "@/navigation";
 import { Logo } from "./Logo";
-import { PriceCounter } from "./PriceCounter";
+import { PrizeCounter } from "./PrizeCounter";
 import { usePathname } from "next/navigation";
 import { MobileSidebar } from "./mobile-sidebar";
 import { NavItem } from "@/types";
@@ -22,7 +22,7 @@ export const Header = ({ links, locale }: Props) => {
       <div className="container mx-auto flex h-full items-center justify-between">
         <Logo />
         <div className="flex items-center gap-6 md:gap-10">
-          <PriceCounter />
+          <PrizeCounter />
           <nav className="max-md:!hidden">
             <ul className="flex items-center gap-10">
               {links.map((item) => (

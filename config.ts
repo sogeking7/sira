@@ -25,6 +25,7 @@ export const pathnames = {
   '/': '/',
   '/settings': '/settings',
   '/donate': '/donate',
+  '/quiz': "/quiz"
 } satisfies Pathnames<typeof localesArray >;
 
 export type AppPathnames = keyof typeof pathnames;
