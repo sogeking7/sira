@@ -27,7 +27,8 @@ export const messages = {
       input: "Ваш номер телефона",
       phoneNumber: "Номер телефона",
       inputPhone: "Введите номер телефона",
-    }
+    },
+    donateKaspi: "Пожертвовать через Kaspi"
   },
   kz: {
     nav: {
@@ -57,7 +58,8 @@ export const messages = {
       input: "Сіздің телефон нөміріңіз",
       phoneNumber: "Телефон нөмірі",
       inputPhone: "Телефон нөміріңізді енгізіңіз",
-    }
+    },
+    donateKaspi: "Kaspi арқылы садақа беру"
   }, 
   en: {
     nav: {
@@ -87,6 +89,7 @@ export const messages = {
       input: "Your phone number",
       phoneNumber: "Phone number",
       inputPhone: "Enter your phone number",
-    }
+    },
+    donateKaspi: "Donate via Kaspi"
   }
 }
