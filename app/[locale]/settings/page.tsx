@@ -1,6 +1,6 @@
-import { ChangePassword } from "@/components/change-password/change-password";
 import { useTranslations } from "next-intl";
 import { unstable_setRequestLocale } from "next-intl/server";
+import { ChangePassword } from "../../../components/change-password";
 
 type Props = {
   params: { locale: string };
