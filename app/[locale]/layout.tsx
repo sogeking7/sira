@@ -7,6 +7,9 @@ import { localesArray } from "@/config";
 import { unstable_setRequestLocale } from "next-intl/server";
 import { NavItem } from "@/types";
 import { useTranslations } from "next-intl";
+import Providers from "@/lib/provider";
+import { useQuery } from "react-query";
+import axios from "axios";
 
 export const fontSans = FontSans({
   subsets: ["latin"],
@@ -27,7 +30,6 @@ export const generateStaticParams = () => localesArray;
 
 export default function LocaleLayout({ children, params: { locale } }: Props) {
   unstable_setRequestLocale(locale);
-
   const t = useTranslations();
   const links: NavItem[] = [
     {
@@ -47,11 +49,13 @@ export default function LocaleLayout({ children, params: { locale } }: Props) {
   return (
     <html className={cn("font-sans", fontSans.variable)}>
       <body>
-        <div className="relative min-h-screen bg-background pb-[72px]  antialiased sm:pb-[80px]">
-          <Header links={links} locale={locale} />
-          {children}
-          <Footer />
-        </div>
+        <Providers>
+          <div className="relative min-h-screen bg-background pb-[72px]  antialiased sm:pb-[80px]">
+            <Header links={links} locale={locale} />
+            {children}
+            <Footer />
+          </div>
+        </Providers>
       </body>
     </html>
   );

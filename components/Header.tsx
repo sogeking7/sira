@@ -8,6 +8,7 @@ import { MobileSidebar } from "./mobile-sidebar";
 import { NavItem } from "@/types";
 import { cn } from "@/lib/utils";
 import LocaleSwitcher from "./locale/LocaleSwitcher";
+import { useUserStore } from "@/hooks/user";
 
 interface Props {
   links: NavItem[];
@@ -16,6 +17,7 @@ interface Props {
 
 export const Header = ({ links, locale }: Props) => {
   const pathname = usePathname();
+  const { user } = useUserStore();
 
   return (
     <header className="h-[72px] sm:h-[80px]">
@@ -23,6 +25,7 @@ export const Header = ({ links, locale }: Props) => {
         <Logo />
         <div className="flex items-center gap-6 md:gap-10">
           <PrizeCounter />
+          {user?.phone}
           <nav className="max-md:!hidden">
             <ul className="flex items-center gap-10">
               {links.map((item) => (

@@ -20,12 +20,7 @@ import Confetti from "react-confetti";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 import * as z from "zod";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-} from "../ui/form";
+import { Form, FormControl, FormField, FormItem } from "../ui/form";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import {
@@ -36,6 +31,8 @@ import {
   AlertDialogTitle,
 } from "../ui/alert-dialog";
 import { formatPhoneNumber } from "@/lib/utils";
+import { useUserStore } from "@/hooks/user";
+import axios from "axios";
 
 interface Props {
   t: any;
@@ -55,12 +52,17 @@ const formSchema = z.object({
     ),
 });
 
+const addUser = async (phone: string) =>
+  await axios.post("/api/user", { phone });
+
 export const ChangePassword = ({ t }: Props) => {
   const [open, setIsOpen] = useState(false);
   const [otpOpen, setOtpOpen] = useState(false);
 
   const [show, setShow] = useState(false);
   const [final, setFinal] = useState("");
+  const [loginPhone, setLoginPhone] = useState<string | null>(null);
+
   const [otp, setOtp] = useState<string>("");
   const [formBtnClicked, setFormBtnClicked] = useState(false);
   const [error, setError] = useState("");
@@ -68,19 +70,25 @@ export const ChangePassword = ({ t }: Props) => {
   const [otpSuccess, setOtpSuccess] = useState(false);
   const [otpBtnClicked, setOtpBtnClicked] = useState(false);
 
+  const { user: myUser, setUser } = useUserStore();
   const [user, loading] = useAuthState(auth);
 
   useEffect(() => {
+    if (loginPhone) {
+      addUser(loginPhone);
+    }
+  }, [loginPhone]);
+
+  useEffect(() => {
     if (loading) {
-      // maybe trigger a loading screen
       return;
     }
     if (user) {
-      console.log(user);
-      form.setValue(
-        "phone",
-        formatPhoneNumber(user.phoneNumber as string) || "",
-      );
+      setUser({
+        id: user.uid,
+        phone: user.phoneNumber as string,
+      });
+      form.setValue("phone", formatPhoneNumber(user.phoneNumber as string));
     }
   }, [user, loading]);
 
@@ -105,7 +113,10 @@ export const ChangePassword = ({ t }: Props) => {
       // @ts-ignore
       .confirm(otp)
       .then((confirmationResult: any) => {
-        setFinal(confirmationResult);
+        setLoginPhone(confirmationResult.user.phoneNumber);
+
+        console.log(confirmationResult.user);
+
         setOtpSuccess(true);
         setTimeout(() => {
           setOtpOpen(false);

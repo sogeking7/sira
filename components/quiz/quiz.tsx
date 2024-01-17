@@ -2,9 +2,9 @@
 import { useEffect, useState } from "react";
 import { Progress } from "../ui/progress";
 import Image from "next/image";
-import { test } from "./test";
+// import { test } from "./test";
 import { cn } from "@/lib/utils";
-import { useQuizStore } from "@/hooks/quiz";
+// import { useQuizStore } from "@/hooks/quiz";
 import { ConfirmAnswerDialog } from "./confirm-answer-dialog";
 import { CorrectMessage } from "./correct-message";
 import { WrongMessage } from "./wrong-message";
@@ -14,21 +14,21 @@ interface Props {
 }
 
 export const Quiz = ({ t }: Props) => {
-  const {
-    index: questionIndex,
-    value: curQuestion,
-    maxQuestionsNumber,
-    clearState,
-  } = useQuizStore();
+  // const {
+  //   index: questionIndex,
+  //   value: curQuestion,
+  //   maxQuestionsNumber,
+  //   clearState,
+  // } = useQuizStore();
   const [open, setIsOpen] = useState(false);
-  const [progress, setProgress] = useState(100 / maxQuestionsNumber);
+  // const [progress, setProgress] = useState(100 / maxQuestionsNumber);
   const [selectedVariantIndex, setSelectedVariantIndex] = useState<
     number | null
   >(null);
   const [status, setStatus] = useState<true | false | null>(null);
 
   useEffect(() => {
-    clearState();
+    // clearState();
   }, []);
 
   const handleSelectVariant = (variantIndex: number) => {
@@ -38,7 +38,7 @@ export const Quiz = ({ t }: Props) => {
 
   return (
     <>
-      <div className="flex flex-col items-center gap-3">
+      {/* <div className="flex flex-col items-center gap-3">
         <h1 className="text-sm sm:text-base">
           <b>{questionIndex + 1} </b>
           из {maxQuestionsNumber}
@@ -110,7 +110,7 @@ export const Quiz = ({ t }: Props) => {
           title={curQuestion.variants[selectedVariantIndex]}
           correctTitle={curQuestion.variants[curQuestion.answer]}
         />
-      )}
+      )} */}
     </>
   );
 };

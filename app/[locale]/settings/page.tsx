@@ -1,6 +1,7 @@
 import { useTranslations } from "next-intl";
 import { unstable_setRequestLocale } from "next-intl/server";
 import { ChangePassword } from "../../../components/change-password";
+import UserList from "@/components/UserList";
 
 type Props = {
   params: { locale: string };
@@ -9,6 +10,7 @@ type Props = {
 export default function SettingsPage({ params: { locale } }: Props) {
   unstable_setRequestLocale(locale);
   const t = useTranslations();
+
   return (
     <main className="m-container mb-20 mt-6">
       <div>
@@ -27,6 +29,7 @@ export default function SettingsPage({ params: { locale } }: Props) {
             inputPhone: t("settings.inputPhone"),
           }}
         />
+        <UserList />
       </div>
     </main>
   );
