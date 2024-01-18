@@ -16,7 +16,7 @@ export async function POST(request: Request) {
   });
 
   if (user) {
-    return Response.json({ user });
+    return Response.json({ user: user });
   }
 
   const newUser = await prisma.user.create({
@@ -25,5 +25,5 @@ export async function POST(request: Request) {
     },
   });
 
-  return Response.json({ newUser });
+  return Response.json({ user: newUser });
 }

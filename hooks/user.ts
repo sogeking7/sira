@@ -1,8 +1,8 @@
 import { create } from "zustand";
 
 type User = {
-  id: string;
-  phone: string;
+  id: string | null;
+  phone: string | null;
 };
 
 type Store = {
