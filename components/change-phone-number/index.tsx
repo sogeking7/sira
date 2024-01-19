@@ -3,6 +3,7 @@
 import { useUserStore } from "@/hooks/user";
 import { ChangePhoneNumberForm } from "./form";
 import { useEffect } from "react";
+import axios from "axios";
 
 interface Props {
   t: any;
@@ -13,12 +14,14 @@ export const ChangePhoneNumber = ({ t }: Props) => {
 
   useEffect(() => {
     if (typeof window !== "undefined" && window.localStorage) {
-      let phone = localStorage.getItem("phone");
-      let userId = localStorage.getItem("userId");
-      setUser({
-        id: userId ? userId : null,
-        phone: phone ? phone : null,
-      });
+      const token = localStorage.getItem("Access_Token");
+      const getUser = async (token: string) =>
+        await axios.post("/api/validate", { token });
+      if (token) {
+        getUser(token).then(({ data }) => {
+          setUser(data);
+        });
+      }
     }
   }, []);
 

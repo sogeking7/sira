@@ -2,6 +2,9 @@ import { useTranslations } from "next-intl";
 import { unstable_setRequestLocale } from "next-intl/server";
 import UserList from "@/components/UserList";
 import { ChangePhoneNumber } from "@/components/change-phone-number";
+import { useQuery } from "react-query";
+import axios from "axios";
+import { useUserStore } from "@/hooks/user";
 
 type Props = {
   params: { locale: string };

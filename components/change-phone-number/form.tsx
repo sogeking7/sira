@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
@@ -19,6 +19,7 @@ import { Button } from "../ui/button";
 import axios from "axios";
 import { PhoneButton } from "./PhoneButton";
 import { useUserStore } from "@/hooks/user";
+import { LoaderIcon } from "lucide-react";
 
 interface Props {
   t: any;
@@ -37,15 +38,18 @@ const formSchema = z.object({
     ),
 });
 
-const addUser = async (phone: string) =>
-  await axios.post("/api/user", { phone });
+const signIn = async (phone: string) =>
+  await axios.post("/api/auth", { phone });
 
 export const ChangePhoneNumberForm = ({ t }: Props) => {
   const { user, setUser } = useUserStore();
   const [open, setIsOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    form.setValue("phone", user?.phone || "");
+    if (open) {
+      form.setValue("phone", user?.phone || "");
+    }
   }, [open]);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -55,17 +59,28 @@ export const ChangePhoneNumberForm = ({ t }: Props) => {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
     const { phone } = values;
-    addUser(phone).then(({ data }) => {
-      localStorage.setItem("userId", data.user.id);
-      localStorage.setItem("phone", data.user.phone);
-      setUser({
-        id: data.user.id,
-        phone: data.user.phone,
+    setLoading(form.formState.isSubmitting);
+    signIn(phone)
+      .then(({ data }) => {
+        const token = data.Access_Token;
+        localStorage.setItem("Access_Token", token);
+        const getUser = async (token: string) =>
+          await axios.post("/api/validate", { token });
+        if (token) {
+          getUser(token).then(({ data }) => {
+            setUser(data);
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setLoading(false);
+        setIsOpen(false);
       });
-    });
-    setIsOpen(false);
   };
 
   return (
@@ -89,7 +104,7 @@ export const ChangePhoneNumberForm = ({ t }: Props) => {
                   <FormControl>
                     <Input
                       type="tel"
-                      readOnly={form.formState.isSubmitting}
+                      readOnly={loading}
                       // @ts-ignore
                       mask="+7 (999)-999-99-99"
                       placeholder="+7 (___)-___-__-__"
@@ -100,13 +115,19 @@ export const ChangePhoneNumberForm = ({ t }: Props) => {
                 </FormItem>
               )}
             />
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={form.formState.isSubmitting || !form.formState.isValid}
-            >
-              {user?.phone ? t.change : "Отправить"}
-            </Button>
+            {loading ? (
+              <div className="flex w-full justify-center">
+                <LoaderIcon className="animate-spin text-primary" />
+              </div>
+            ) : (
+              <Button
+                type="submit"
+                className="w-full"
+                disabled={!form.formState.isValid}
+              >
+                {user?.phone ? t.change : "Отправить"}
+              </Button>
+            )}
           </form>
         </Form>
       </DialogContent>

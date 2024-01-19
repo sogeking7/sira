@@ -7,12 +7,12 @@ type User = {
 
 type Store = {
   user: User | null;
-  setUser: (user: User) => void;
-};
+  setUser: (data: User) => void;
+}  
 
 export const useUserStore = create<Store>()((set) => {
   return {
     user: null,
-    setUser: (user) => set(() => ({ user })),
+    setUser: (data) => set(() => ({user: data})),
   };
 });
