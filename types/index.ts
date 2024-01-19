@@ -4,5 +4,3 @@ export type NavItem = {
   icon?: string;
   children?: NavItem[];
 }
-
-export type User

@@ -11,7 +11,7 @@ import {
 import { Button } from "../ui/button";
 import { useEffect } from "react";
 import { set } from "react-hook-form";
-import { useQuizStore } from "@/hooks/quiz";
+// import { useQuizStore } from "@/hooks/quiz";
 import { usePrizeStore } from "@/hooks/prize";
 
 interface Props {
@@ -33,7 +33,7 @@ export const ConfirmAnswerDialog = ({
   setStatus,
   setSelectedVariantIndex,
 }: Props) => {
-  const { value: curQuestion } = useQuizStore();
+  // const { value: curQuestion } = useQuizStore();
   const { setPrizeStatus } = usePrizeStore();
 
   useEffect(() => {
@@ -43,13 +43,13 @@ export const ConfirmAnswerDialog = ({
   }, [open]);
 
   const handleAnswer = () => {
-    if (selectedVariantIndex === curQuestion.answer) {
-      setPrizeStatus("gifted");
-      setStatus(true);
-    } else {
-      setPrizeStatus("not-gifted");
-      setStatus(false);
-    }
+    // if (selectedVariantIndex === curQuestion.answer) {
+    //   setPrizeStatus("gifted");
+    //   setStatus(true);
+    // } else {
+    //   setPrizeStatus("not-gifted");
+    //   setStatus(false);
+    // }
     setIsOpen(false);
   };
 

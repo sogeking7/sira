@@ -9,7 +9,7 @@ export default function UserList() {
   );
 
   if (isLoading) return "Loading...";
-
+// @ts-ignore
   if (error) return "An error has occurred: " + error.message;
 
   return (

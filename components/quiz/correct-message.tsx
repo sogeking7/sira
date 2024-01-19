@@ -1,6 +1,6 @@
 "use client";
 
-import { useQuizStore } from "@/hooks/quiz";
+// import { useQuizStore } from "@/hooks/quiz";
 import { Button } from "../ui/button";
 import { useRouter } from "@/navigation";
 import { usePrizeStore } from "@/hooks/prize";
@@ -13,14 +13,14 @@ interface Props {
 
 export const CorrectMessage = ({ title, setStatus, setProgress }: Props) => {
   const router = useRouter();
-  const { index, nextQuestion, maxQuestionsNumber } = useQuizStore();
+  // const { index, nextQuestion, maxQuestionsNumber } = useQuizStore();
   const { inc, currentQuestionPrizeStatus, setPrizeStatus } = usePrizeStore();
   const handleNextQuestion = () => {
-    if (index === maxQuestionsNumber - 1) {
-      router.push("/");
-      return;
-    }
-    nextQuestion();
+    // if (index === maxQuestionsNumber - 1) {
+    //   router.push("/");
+    //   return;
+    // }
+    // nextQuestion();
     setPrizeStatus("pending");
     // @ts-ignore
     setProgress((value) => value + 100 / maxQuestionsNumber);
@@ -52,7 +52,7 @@ export const CorrectMessage = ({ title, setStatus, setProgress }: Props) => {
           onClick={handleNextQuestion}
           variant="outline"
         >
-          {index !== maxQuestionsNumber - 1 ? "Следующий вопрос" : "Завершить"}
+          {/* {index !== maxQuestionsNumber - 1 ? "Следующий вопрос" : "Завершить"} */}
         </Button>
       </div>
     </div>
