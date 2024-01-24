@@ -15,11 +15,11 @@ export async function GET(
       questions: {
         select: {
           id: true,
-          questionTitle: true,
+          title: true,
           answers: {
             select: {
               id: true,
-              description: true,
+              title: true,
               isCorrect: false,
             },
           },
@@ -28,5 +28,5 @@ export async function GET(
     },
   });
 
-  return Response.json({ questionnaire });
+  return Response.json({ ...questionnaire });
 }

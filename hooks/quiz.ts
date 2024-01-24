@@ -1,32 +1,62 @@
-// import { create } from "zustand";
-// import { test } from "@/components/quiz/test";
+import { Question, Questionnaire } from "@/types";
+import { create } from "zustand";
 
-// type Store = {
-//   maxQuestionsNumber: number;
-//   index: number;
-//   value: {
-//     question: string;
-//     variants: string[];
-//     answer: number;
-//   };
-//   nextQuestion: () => void;
-//   clearState: () => void;
-// };
+type Store = {
+  questionnaireId: number;
+  questionnaire: Questionnaire | null;
+  question: Question | null;
+  progress: number | null;
+  isLastQuestion: boolean | null;
+  correctAnswersCount: number;
+  removeQuiz: () => void;
+  nextQuestion: () => void;
+  initQuiz: (data: {
+    attempt: {
+      questionnaire: Questionnaire;
+    };
+    nextQuestion: Question;
+    isLastQuestion: boolean;
+    correctAnswersCount: number;
+  }) => void;
+};
 
-// export const useQuizStore = create<Store>()((set) => {
-//   const defaultIndex = 0;
-//   return {
-//     index: defaultIndex,
-//     value: test[defaultIndex],
-//     maxQuestionsNumber: test.length,
-//     nextQuestion: () =>
-//       set((state) => {
-//         if (state.index === state.maxQuestionsNumber - 1) return state;
-//         return {
-//           index: state.index + 1,
-//           value: test[state.index + 1],
-//         };
-//       }),
-//     clearState: () => set({ index: defaultIndex, value: test[defaultIndex] }),
-//   };
-// });
+export const useQuizStore = create<Store>()((set) => {
+  return {
+    questionnaireId: 1,
+    questionnaire: null,
+    question: null,
+    progress: null,
+    isLastQuestion: null,
+    correctAnswersCount: 0,
+    removeQuiz: () =>
+      set(() => {
+        return {
+          questionnaire: null,
+          question: null,
+          progress: null,
+          isLastQuestion: null,
+          correctAnswersCount: 0,
+        };
+      }),
+    initQuiz: (data) =>
+      set(() => {
+        return {
+          questionnaire: data.attempt.questionnaire,
+          question: data.nextQuestion,
+          isLastQuestion: data.isLastQuestion,
+          correctAnswersCount: data.correctAnswersCount,
+        };
+      }),
+    nextQuestion: () =>
+      set((state) => {
+        if (state.questionnaire === null || state.question === null) return {};
+        const curQuestionId = state.question.id;
+        const maxQuestions = state.questionnaire.questions.length;
+        if (curQuestionId === maxQuestions) return {};
+        const nextQuestion = state.questionnaire.questions[curQuestionId];
+        return {
+          question: nextQuestion,
+        };
+      }),
+  };
+});

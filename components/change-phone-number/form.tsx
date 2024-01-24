@@ -20,6 +20,9 @@ import axios from "axios";
 import { PhoneButton } from "./PhoneButton";
 import { useUserStore } from "@/hooks/user";
 import { LoaderIcon } from "lucide-react";
+import { useQueryClient } from "react-query";
+import { usePrizeStore } from "@/hooks/prize";
+import { useQuizStore } from "@/hooks/quiz";
 
 interface Props {
   t: any;
@@ -41,8 +44,16 @@ const formSchema = z.object({
 const signIn = async (phone: string) =>
   await axios.post("/api/auth", { phone });
 
+const getUser = async (token: string) =>
+  await axios.post("/api/validate", { token });
+
 export const ChangePhoneNumberForm = ({ t }: Props) => {
-  const { user, setUser } = useUserStore();
+  const queryClient = useQueryClient();
+
+  const { removePrize } = usePrizeStore();
+  const { user, setUser, removeUser } = useUserStore();
+  const { removeQuiz } = useQuizStore();
+
   const [open, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -62,15 +73,19 @@ export const ChangePhoneNumberForm = ({ t }: Props) => {
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     const { phone } = values;
     setLoading(form.formState.isSubmitting);
+    queryClient.invalidateQueries({
+      queryKey: ["prize", "user", "questionnaire"],
+    });
+    removeUser();
+    removePrize();
+    removeQuiz();
     signIn(phone)
       .then(({ data }) => {
         const token = data.Access_Token;
         localStorage.setItem("Access_Token", token);
-        const getUser = async (token: string) =>
-          await axios.post("/api/validate", { token });
-        if (token) {
-          getUser(token).then(({ data }) => {
-            setUser(data);
+        if (token && typeof token === "string") {
+          getUser(token).then(({ userData }) => {
+            setUser(userData);
           });
         }
       })

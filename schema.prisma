@@ -3,56 +3,61 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  // directUrl = env("DIRECT_URL")
 }
 
 model User {
-  id        String   @id @default(cuid())
+  id        String    @id @default(cuid())
   phone     String?
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  result    Result[]
+  attempts  Attempt[]
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
 }
 
 model Questionnaire {
-  id                 Int        @id @default(autoincrement())
-  questionnaireTitle String
-  description        String
-  imageUrl           String
-  createdAt          DateTime   @default(now()) @map("created_at")
-  updatedAt          DateTime   @updatedAt @map("updated_at")
-  questions          Question[]
-  result             Result[]
-}
-
-model Result {
-  id              Int            @id @default(autoincrement())
-  userId          String?
-  questionnaireId Int?
-  createdAt       DateTime       @default(now()) @map("created_at")
-  updatedAt       DateTime       @updatedAt @map("updated_at")
-  answers         Answer[]
-  questionnaire   Questionnaire? @relation(fields: [questionnaireId], references: [id])
-  user            User?          @relation(fields: [userId], references: [id])
+  id        Int        @id @default(autoincrement())
+  title     String
+  questions Question[]
+  attempts  Attempt[]
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @map("updated_at")
 }
 
 model Question {
   id              Int            @id @default(autoincrement())
-  questionTitle   String
+  title           String
   imageUrl        String
-  questionnaireId Int?
   answers         Answer[]
   questionnaire   Questionnaire? @relation(fields: [questionnaireId], references: [id])
+  questionnaireId Int?
 }
 
 model Answer {
-  id          String    @id @default(cuid())
-  description String
-  isCorrect   Boolean   @default(false)
-  questionId  Int?
-  resultId    Int?
-  question    Question? @relation(fields: [questionId], references: [id])
-  result      Result?   @relation(fields: [resultId], references: [id])
+  id         Int                @id @default(autoincrement())
+  title      String
+  isCorrect  Boolean            @default(false)
+  question   Question?          @relation(fields: [questionId], references: [id])
+  questionId Int?
+  attempts   AttemptOnAnswers[]
+}
+
+model Attempt {
+  id              Int                @id @default(autoincrement())
+  user            User?              @relation(fields: [userId], references: [id])
+  userId          String?
+  selectedAnswers AttemptOnAnswers[]
+  questionnaire   Questionnaire?     @relation(fields: [questionnaireId], references: [id])
+  questionnaireId Int?
+}
+
+model AttemptOnAnswers {
+  id        Int      @id @default(autoincrement())
+  attempt   Attempt? @relation(fields: [attemptId], references: [id])
+  attemptId Int?
+  answer    Answer?  @relation(fields: [answerId], references: [id])
+  answerId  Int?
+  
+  createdAt DateTime @default(now()) @map("created_at")
 }

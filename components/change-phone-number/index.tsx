@@ -10,18 +10,12 @@ interface Props {
 }
 
 export const ChangePhoneNumber = ({ t }: Props) => {
-  const { setUser } = useUserStore();
+  const { user, setUser } = useUserStore();
 
   useEffect(() => {
     if (typeof window !== "undefined" && window.localStorage) {
       const token = localStorage.getItem("Access_Token");
-      const getUser = async (token: string) =>
-        await axios.post("/api/validate", { token });
-      if (token) {
-        getUser(token).then(({ data }) => {
-          setUser(data);
-        });
-      }
+      if (token && !user) setUser(token);
     }
   }, []);
 

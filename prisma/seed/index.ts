@@ -6,9 +6,7 @@ const prisma = new PrismaClient();
 async function main() {
   const questionnaire = await prisma.questionnaire.create({
     data: {
-      questionnaireTitle: "quiz 1",
-      description: "quiz 1 description",
-      imageUrl: "",
+      title: "Quiz",
     },
   });
 
@@ -16,7 +14,7 @@ async function main() {
     const newQuestion = await prisma.question.create({
       data: {
         questionnaireId: questionnaire.id,
-        questionTitle: question.title,
+        title: question.title,
         imageUrl: `/quiz/${questionIndex + 1}.png`,
       },
     });
@@ -28,7 +26,7 @@ async function main() {
         data: {
           answers: {
             create: {
-              description: answer,
+              title: answer,
               isCorrect: answerIndex === question.correctAnswerIndex,
             },
           },

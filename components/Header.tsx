@@ -24,8 +24,9 @@ export const Header = ({ links, locale }: Props) => {
       <div className="container mx-auto flex h-full items-center justify-between">
         <Logo />
         <div className="flex items-center gap-6 md:gap-10">
-          <PrizeCounter />
+          <PrizeCounter />  
           {/* {user?.phone} */}
+          {/* {user?.id} */}
           <nav className="max-md:!hidden">
             <ul className="flex items-center gap-10">
               {links.map((item) => (

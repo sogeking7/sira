@@ -1,35 +1,28 @@
 "use client";
-// import { useQuizStore } from "@/hooks/quiz";
+
 import { Button } from "../ui/button";
 import { useRouter } from "@/navigation";
+import { useQuery } from "react-query";
+import axios from "axios";
+import { useQuizStore } from "@/hooks/quiz";
+import { useUserStore } from "@/hooks/user";
 import { usePrizeStore } from "@/hooks/prize";
 
 interface Props {
   title: string;
   correctTitle: string;
   setStatus: (value: boolean | null) => void;
-  setProgress: any;
+  refetch: () => void;
 }
 
-export const WrongMessage = ({
-  title,
-  correctTitle,
-  setStatus,
-  setProgress,
-}: Props) => {
+export const WrongMessage = ({ title, correctTitle, setStatus, refetch }: Props) => {
   const router = useRouter();
-  // const { index, nextQuestion, maxQuestionsNumber } = useQuizStore();
-  const { setPrizeStatus } = usePrizeStore();
+  const { user } = useUserStore();
+  const { set } = usePrizeStore();
+  const { initQuiz, isLastQuestion, correctAnswersCount } = useQuizStore();
 
   const handleNextQuestion = () => {
-    // if (index === maxQuestionsNumber - 1) {
-    //   router.push("/");
-    //   return;
-    // }
-    // nextQuestion();
-    setPrizeStatus("pending");
-    // @ts-ignore
-    setProgress((value) => value + 100 / maxQuestionsNumber);
+    refetch();
     setStatus(null);
   };
   return (
@@ -46,7 +39,7 @@ export const WrongMessage = ({
           {correctTitle}
         </div>
         <Button className="mt-3 w-full" onClick={handleNextQuestion}>
-          {/* {index !== maxQuestionsNumber - 1 ? "Следующий вопрос" : "Завершить"} */}
+          {isLastQuestion ? "Завершить" : "Следующий вопрос"}
         </Button>
       </div>
     </div>

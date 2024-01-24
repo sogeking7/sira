@@ -1,13 +1,19 @@
 import createMiddleware from 'next-intl/middleware';
 import { pathnames, localeDetection, localesArray} from './config';
+import { NextRequest } from 'next/server';
 
-export default createMiddleware({
+const intlMiddleware =  createMiddleware({
   defaultLocale: 'ru',
   locales: localesArray,
   localePrefix: 'always',
   localeDetection,
-  pathnames
+  pathnames,
+  
 });
+
+export default async function middleware(req: NextRequest) {
+  return intlMiddleware(req);
+}
 
 export const config = {
   matcher: [

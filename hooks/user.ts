@@ -1,3 +1,4 @@
+import axios from "axios";
 import { create } from "zustand";
 
 type User = {
@@ -7,12 +8,19 @@ type User = {
 
 type Store = {
   user: User | null;
-  setUser: (data: User) => void;
+  setUser: (token: string) => void;
+  removeUser: () => void;
 }  
 
 export const useUserStore = create<Store>()((set) => {
   return {
     user: null,
-    setUser: (data) => set(() => ({user: data})),
+    removeUser: () => set({ user: null }),
+    setUser: async (token) => {
+      const response = await axios.post('/api/validate', { token });
+      set({
+        user: response.data,
+      });
+    },
   };
 });
