@@ -80,10 +80,12 @@ export const ChangePhoneNumberForm = ({ t }: Props) => {
     removePrize();
     removeQuiz();
     signIn(phone)
+      // @ts-ignore
       .then(({ data }) => {
         const token = data.Access_Token;
         localStorage.setItem("Access_Token", token);
         if (token && typeof token === "string") {
+          // @ts-ignore
           getUser(token).then(({ userData }) => {
             setUser(userData);
           });

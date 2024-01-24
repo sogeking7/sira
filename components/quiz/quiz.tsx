@@ -77,6 +77,7 @@ export const Quiz = ({ t }: Props) => {
         answerId: selectedAnswer?.id,
         userId: user?.id,
       })
+      // @ts-ignore
       .then(({ data }) => {
         setCorrectAnswer(data.correctAnswer.title);
         setStatus(data.isCorrect);
@@ -102,7 +103,8 @@ export const Quiz = ({ t }: Props) => {
               <b>{question?.id} </b>
               из {questionnaire?.questions.length}
             </h1>
-            <Progress value={question.id! / questionnaire.questions.length! * 100} className="w-full" />
+            
+            <Progress value={question?.id! / questionnaire?.questions.length! * 100} className="w-full" />
           </div>
           <Image
             src={`/quiz/${question?.id}.png`}

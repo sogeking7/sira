@@ -24,6 +24,7 @@ export const PrizeCounter = () => {
     {
       refetchOnWindowFocus: false,
       refetchOnMount: 'always',
+      // @ts-ignore
       onSuccess: ({ data }) => {
         set(data.count);
         setMax(data.max);
