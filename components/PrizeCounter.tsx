@@ -1,5 +1,4 @@
 "use client";
-import { usePrizeStore } from "@/hooks/prize";
 import { useQuery } from "react-query";
 import axios from "axios";
 import { useUserStore } from "@/hooks/user";
@@ -8,36 +7,26 @@ import { useQuizStore } from "@/hooks/quiz";
 import { Loader } from "lucide-react";
 
 export const PrizeCounter = () => {
-  const { count, max, set, setMax } = usePrizeStore();
-  const { user } = useUserStore();
+  const { user, setUser, count, max } = useUserStore();
   const { questionnaireId } = useQuizStore();
 
-  const { isLoading } = useQuery(
-    "prize",
-    () => {
-      if (!user) return;
-      return axios.post("/api/prize", {
-        userId: user.id,
-        questionnaireId,
-      });
-    },
-    {
-      refetchOnWindowFocus: false,
-      refetchOnMount: 'always',
-      // @ts-ignore
-      onSuccess: ({ data }) => {
-        set(data.count);
-        setMax(data.max);
-      },
-    },
-  );
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.localStorage) {
+      const token = localStorage.getItem("Access_Token");
+      if (token) setUser(token);
+    }
+  }, []);
 
-  if (isLoading) {
+  if (!user) {
     return (
       <div className="font-semibold">
         <Loader size={16} className="animate-spin" />
       </div>
     );
+  }
+
+  if (!user.id) {
+    return null;
   }
 
   return (

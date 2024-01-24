@@ -21,7 +21,6 @@ import { Button } from "../ui/button";
 import { Answer } from "@/types";
 import { useUserStore } from "@/hooks/user";
 import { Results } from "./results";
-import { usePrizeStore } from "@/hooks/prize";
 
 interface Props {
   t: any;
@@ -29,7 +28,6 @@ interface Props {
 
 export const Quiz = ({ t }: Props) => {
   const { user, setUser } = useUserStore();
-  const { set } = usePrizeStore();
   const {
     initQuiz,
     question,
@@ -47,6 +45,9 @@ export const Quiz = ({ t }: Props) => {
         questionnaireId,
       }),
     {
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      // refetchOnMount: false,
       onSuccess: (data) => {
         initQuiz(data.data);
       },
@@ -77,7 +78,6 @@ export const Quiz = ({ t }: Props) => {
         answerId: selectedAnswer?.id,
         userId: user?.id,
       })
-      // @ts-ignore
       .then(({ data }) => {
         setCorrectAnswer(data.correctAnswer.title);
         setStatus(data.isCorrect);
@@ -96,15 +96,18 @@ export const Quiz = ({ t }: Props) => {
 
   return (
     <div>
-      {status === null && !isLastQuestion && (
+      {status === null && question && (
         <div>
           <div className="flex flex-col items-center gap-3">
             <h1 className="text-sm sm:text-base">
               <b>{question?.id} </b>
               из {questionnaire?.questions.length}
             </h1>
-            
-            <Progress value={question?.id! / questionnaire?.questions.length! * 100} className="w-full" />
+
+            <Progress
+              value={(question?.id / questionnaire?.questions.length) * 100}
+              className="w-full"
+            />
           </div>
           <Image
             src={`/quiz/${question?.id}.png`}
@@ -164,10 +167,14 @@ export const Quiz = ({ t }: Props) => {
           </Dialog>
         </div>
       )}
-      {isLastQuestion && status === null && <Results />}
-      
+      {!question && status === null && <Results />}
+
       {status === true && (
-        <CorrectMessage refetch={refetch} setStatus={setStatus} title={selectedAnswer?.title!} />
+        <CorrectMessage
+          refetch={refetch}
+          setStatus={setStatus}
+          title={selectedAnswer?.title!}
+        />
       )}
       {status === false && (
         <WrongMessage

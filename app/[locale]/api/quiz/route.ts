@@ -88,6 +88,22 @@ export async function POST(request: Request) {
     take: 1,
   });
 
+  const foo = await prisma.question.findFirst({
+    where: {
+      questionnaireId: body.questionnaireId,
+      id: {
+        gt: nextQuestionId + 1,
+      },
+    },
+    include: {
+      answers: true,
+    },
+    orderBy: {
+      id: "asc",
+    },
+    take: 1,
+  });
+
   if (attempt) {
     const correctAnswersCount = attempt?.selectedAnswers.reduce(
       (total, current) => {
@@ -99,7 +115,7 @@ export async function POST(request: Request) {
       attempt,
       nextQuestion,
       correctAnswersCount,
-      isLastQuestion: nextQuestion === null,
+      isLastQuestion: foo === null,
     });
   } else {
     return Response.json({
@@ -108,7 +124,7 @@ export async function POST(request: Request) {
       },
       nextQuestion,
       correctAnswersCount: 0,
-      isLastQuestion: nextQuestion === null,
+      isLastQuestion: foo === null,
     });
   }
 }

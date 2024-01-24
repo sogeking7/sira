@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
@@ -21,8 +21,9 @@ import { PhoneButton } from "./PhoneButton";
 import { useUserStore } from "@/hooks/user";
 import { LoaderIcon } from "lucide-react";
 import { useQueryClient } from "react-query";
-import { usePrizeStore } from "@/hooks/prize";
+// import { usePrizeStore } from "@/hooks/prize";
 import { useQuizStore } from "@/hooks/quiz";
+import { useRouter } from "@/navigation";
 
 interface Props {
   t: any;
@@ -48,9 +49,9 @@ const getUser = async (token: string) =>
   await axios.post("/api/validate", { token });
 
 export const ChangePhoneNumberForm = ({ t }: Props) => {
+  const router = useRouter();
   const queryClient = useQueryClient();
-
-  const { removePrize } = usePrizeStore();
+  // const { removePrize } = usePrizeStore();
   const { user, setUser, removeUser } = useUserStore();
   const { removeQuiz } = useQuizStore();
 
@@ -77,19 +78,12 @@ export const ChangePhoneNumberForm = ({ t }: Props) => {
       queryKey: ["prize", "user", "questionnaire"],
     });
     removeUser();
-    removePrize();
     removeQuiz();
     signIn(phone)
-      // @ts-ignore
       .then(({ data }) => {
         const token = data.Access_Token;
         localStorage.setItem("Access_Token", token);
-        if (token && typeof token === "string") {
-          // @ts-ignore
-          getUser(token).then(({ userData }) => {
-            setUser(userData);
-          });
-        }
+        if (token) setUser(token);
       })
       .catch((err) => {
         console.log(err);
@@ -98,6 +92,7 @@ export const ChangePhoneNumberForm = ({ t }: Props) => {
         setLoading(false);
         setIsOpen(false);
       });
+    router.refresh();
   };
 
   return (

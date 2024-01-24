@@ -2,7 +2,6 @@
 
 import { Button } from "../ui/button";
 import { useRouter } from "@/navigation";
-import { usePrizeStore } from "@/hooks/prize";
 import { useQuizStore } from "@/hooks/quiz";
 import { useUserStore } from "@/hooks/user";
 import axios from "axios";
@@ -17,7 +16,7 @@ interface Props {
 
 export const CorrectMessage = ({ title, setStatus, refetch }: Props) => {
   const router = useRouter();
-  const { inc, set } = usePrizeStore();
+  const { inc } = useUserStore();
 
   const { user } = useUserStore();
   const { initQuiz, correctAnswersCount, isLastQuestion, questionnaireId } =
@@ -44,7 +43,9 @@ export const CorrectMessage = ({ title, setStatus, refetch }: Props) => {
         <div className="mt-6 w-full rounded-md bg-primary/[12%] px-3 py-6 text-left transition-colors max-sm:text-sm">
           {title}
         </div>
-        <Button className="mt-12 w-full" onClick={handlePrize}>
+        <Button 
+          disabled={prizeBtnClicked}
+        className="mt-12 w-full" onClick={handlePrize}>
           Получить подарок
         </Button>
         {prizeBtnClicked && (

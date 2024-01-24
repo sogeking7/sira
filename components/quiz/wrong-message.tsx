@@ -6,7 +6,6 @@ import { useQuery } from "react-query";
 import axios from "axios";
 import { useQuizStore } from "@/hooks/quiz";
 import { useUserStore } from "@/hooks/user";
-import { usePrizeStore } from "@/hooks/prize";
 
 interface Props {
   title: string;
@@ -18,7 +17,6 @@ interface Props {
 export const WrongMessage = ({ title, correctTitle, setStatus, refetch }: Props) => {
   const router = useRouter();
   const { user } = useUserStore();
-  const { set } = usePrizeStore();
   const { initQuiz, isLastQuestion, correctAnswersCount } = useQuizStore();
 
   const handleNextQuestion = () => {
