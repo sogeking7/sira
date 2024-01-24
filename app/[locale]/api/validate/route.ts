@@ -83,7 +83,7 @@ export async function POST(request: Request) {
       phone: payload.phone,
     },
     attempts: {
-      ...attempts[0],
+      ...attempts,
       count: correctAnswersCount,
       max: foo?.questionnaire?.questions.length,
     },

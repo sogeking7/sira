@@ -105,7 +105,7 @@ export const Quiz = ({ t }: Props) => {
             </h1>
 
             <Progress
-              value={(question?.id / questionnaire?.questions.length) * 100}
+              value={(question?.id / questionnaire?.questions.length!) * 100}
               className="w-full"
             />
           </div>
