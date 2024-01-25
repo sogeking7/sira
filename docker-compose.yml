@@ -1,0 +1,28 @@
+version: '3.9'
+
+services:
+  web1:
+    restart: on-failure
+    build:
+      context: ./
+    container_name: web1
+    hostname: web1
+    ports:
+      - '3000:3000'
+    networks:
+      - example-net
+  nginx:
+    build:
+      context: ./nginx
+    container_name: nginx
+    hostname: nginx
+    ports:
+      - '80:80'
+    depends_on:
+      - web1
+    networks:
+      - example-net
+
+networks:
+  example-net:
+    external: true
