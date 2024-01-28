@@ -15,6 +15,11 @@ services:
       - /app/node_modules
     networks:
       - my-network
+    environment:
+      - DATABASE_URL=postgresql://postgres:admin@localhost:5432/postgres?schema=public
+      - NEXT_PUBLIC_JWT_SECRET_KEY=ae5e26624df41cac57d148688bd6406d2b25be8d43a71e061d98fb528aea5034
+    depends_on:
+      - postgres
   nginx:
     build:
       context: ./nginx
