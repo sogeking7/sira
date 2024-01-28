@@ -1,10 +1,8 @@
-FROM nginx:1.21.6
+FROM nginx:alpine
 
-COPY nginx.conf /etc/nginx/sites-available/sira.conf
+RUN rm /etc/nginx/conf.d/*
 
-RUN ln -s /etc/nginx/sites-available/sira.conf /etc/nginx/sites-enabled/
-
-RUN rm /etc/nginx/conf.d/default
+COPY ./nginx.conf /etc/nginx/conf.d/
 
 EXPOSE 80
 
