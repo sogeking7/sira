@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 import { MobileSidebar } from "./mobile-sidebar";
 import { NavItem } from "@/types";
 import { cn } from "@/lib/utils";
-import LocaleSwitcher from "./locale/LocaleSwitcher";
+import LocaleSwitcher from "./LocaleSwitcher";
 import { useUserStore } from "@/hooks/user";
 
 interface Props {

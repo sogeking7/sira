@@ -8,7 +8,7 @@ WORKDIR /app
 # Copy package.json and package-lock.json to the container
 COPY package.json pnpm-lock.yaml ./
 
-# Install dependencies using npm
+# Install dependencies using pnpm
 RUN yarn global add pnpm && pnpm i 
 
 # Copy the rest of the application files to the container

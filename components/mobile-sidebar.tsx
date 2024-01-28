@@ -12,7 +12,7 @@ import { Logo } from "./Logo";
 import { Link } from "@/navigation";
 import { cn } from "@/lib/utils";
 import { NavItem } from "@/types";
-import LocaleSwitcher from "./locale/LocaleSwitcher";
+import LocaleSwitcher from "./LocaleSwitcher";
 
 interface MobileSidebarProps {
   pathname: string;

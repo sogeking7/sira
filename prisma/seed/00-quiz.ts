@@ -79,7 +79,7 @@ export const quiz = [
       "На спине между лопатками у него была надпись «Ля иляха илляллах Мухаммадан расулюллах»",
       "Все ответы верны",
     ],
-    correctAnswerIndex: 5,
+    correctAnswerIndex: 2,
   },
   {
     title:

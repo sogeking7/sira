@@ -21,7 +21,6 @@ import { PhoneButton } from "./PhoneButton";
 import { useUserStore } from "@/hooks/user";
 import { LoaderIcon } from "lucide-react";
 import { useQueryClient } from "react-query";
-// import { usePrizeStore } from "@/hooks/prize";
 import { useQuizStore } from "@/hooks/quiz";
 import { useRouter } from "@/navigation";
 

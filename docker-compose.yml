@@ -1,16 +1,16 @@
 version: '3.9'
 
 services:
-  web1:
+  web:
     restart: on-failure
     build:
       context: ./
-    container_name: web1
-    hostname: web1
+    container_name: web
+    hostname: web
     ports:
       - '3000:3000'
     networks:
-      - example-net
+      - my-network
   nginx:
     build:
       context: ./nginx
@@ -19,10 +19,28 @@ services:
     ports:
       - '80:80'
     depends_on:
-      - web1
+      - web
     networks:
-      - example-net
+      - my-network
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: postgres
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - my-network
 
 networks:
-  example-net:
+  my-network:
     external: true
+
+volumes:
+  postgres_data:
+    driver: local
