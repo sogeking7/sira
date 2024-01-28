@@ -106,7 +106,7 @@ export async function POST(request: Request) {
 
   if (attempt) {
     const correctAnswersCount = attempt?.selectedAnswers.reduce(
-      (total, current) => {
+      (total: number, current: any) => {
         return current.answer?.isCorrect ? total + 1 : total;
       },
       0,

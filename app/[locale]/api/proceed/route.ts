@@ -90,7 +90,7 @@ export async function POST(request: Request) {
     }
   } else {
     const isQuestionAlreadyAnswered = attempt.selectedAnswers.find(
-      (selectedAnswer) => selectedAnswer.answerId === body.answerId,
+      (selectedAnswer: any) => selectedAnswer.answerId === body.answerId,
     );
     if (isQuestionAlreadyAnswered) {
       return Response.json(
