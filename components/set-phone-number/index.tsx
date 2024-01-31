@@ -33,7 +33,7 @@ export const SetPhoneNumber = ({ t, imgSrc, children }: Props) => {
   return (
     <>
       <Dialog open={open} onOpenChange={setIsOpen} defaultOpen={open}>
-        <DialogTrigger className={cn(show ? "w-full" : "hidden")}>
+        <DialogTrigger className={cn(show && !user ? "w-full" : "hidden")}>
           {children}
         </DialogTrigger>
         <DialogContent className="w-[312px]">

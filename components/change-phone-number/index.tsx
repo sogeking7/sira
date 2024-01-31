@@ -31,7 +31,7 @@ export const ChangePhoneNumber = ({ t, imgSrc, children }: Props) => {
   return (
     <>
       <Dialog open={open} onOpenChange={setIsOpen} defaultOpen={open}>
-        <DialogTrigger className={cn(user ? "hidden" : "w-full")}>
+        <DialogTrigger className="w-full">
           {children}
         </DialogTrigger>
         <DialogContent className="w-[312px]">
