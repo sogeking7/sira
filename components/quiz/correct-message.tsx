@@ -38,7 +38,7 @@ export const CorrectMessage = ({ t, selectAnswerTitle, setStatus }: Props) => {
           {selectAnswerTitle}
         </div>
         <div className="mt-12 flex w-full flex-col gap-3">
-          <SetPhoneNumber fromQuiz imgSrc="/icons/prize.svg" t={t}>
+          <SetPhoneNumber imgSrc="/icons/prize.svg" t={t}>
             <Button className="w-full">{t.getPrize}</Button>
           </SetPhoneNumber>
           <Button

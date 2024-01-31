@@ -22,7 +22,7 @@ export async function POST(request: Request) {
     },
   });
 
-  const isQuestionAlreadyAnswered = attempt.selectedAnswers.find(
+  const isQuestionAlreadyAnswered = attempt?.selectedAnswers.find(
     (val: any) => val.answer.questionId === questionId,
   );
 
@@ -35,7 +35,7 @@ export async function POST(request: Request) {
 
   const updatedAttempt = await prisma.attempt.update({
     where: {
-      id: attempt.id,
+      id: attempt?.id,
     },
     data: {
       selectedAnswers: {

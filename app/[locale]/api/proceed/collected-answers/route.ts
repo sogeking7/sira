@@ -34,7 +34,7 @@ export async function POST(request: Request) {
       data: {
         user: {
           connect: {
-            id: user.id,
+            id: user?.id,
           },
         },
         questionnaire: {

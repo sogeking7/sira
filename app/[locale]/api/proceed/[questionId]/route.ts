@@ -19,7 +19,7 @@ export async function GET(
     },
   });
 
-  const correctAnswer = question.answers[0];
+  const correctAnswer = question?.answers[0];
 
   return Response.json(correctAnswer);
 }

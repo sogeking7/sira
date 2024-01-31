@@ -18,7 +18,6 @@ export default function SettingsPage() {
           {t("desc2")}
         </p>
         <ChangePhoneNumber
-          fromQuiz={false}
           imgSrc="/icons/phone.svg"
           t={{
             change: t("change"),
