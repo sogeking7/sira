@@ -2,20 +2,20 @@ import prisma from "@/prisma/prisma";
 
 export async function GET(
   request: Request,
-  params: { params: { id: string } },
+  { params }: { params: { id: string } },
 ) {
-  const id = parseInt(params.params.id);
+  const questionnaireId = parseInt(params.id);
 
   const questionnaire = await prisma.questionnaire.findFirst({
     where: {
-      id,
+      id: questionnaireId,
     },
     select: {
-      id: true,
       questions: {
         select: {
           id: true,
           title: true,
+          imageUrl: true,
           answers: {
             select: {
               id: true,
@@ -28,5 +28,5 @@ export async function GET(
     },
   });
 
-  return Response.json({ ...questionnaire });
+  return Response.json(questionnaire?.questions);
 }

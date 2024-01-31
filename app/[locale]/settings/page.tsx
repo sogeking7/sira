@@ -1,36 +1,36 @@
 import { useTranslations } from "next-intl";
-import { unstable_setRequestLocale } from "next-intl/server";
-import UserList from "@/components/UserList";
 import { ChangePhoneNumber } from "@/components/change-phone-number";
-import { useQuery } from "react-query";
-import axios from "axios";
-import { useUserStore } from "@/hooks/user";
+import { PhoneBtn } from "@/components/change-phone-number/phone-btn";
 
-type Props = {
-  params: { locale: string };
-};
-
-export default function SettingsPage({ params: { locale } }: Props) {
-  unstable_setRequestLocale(locale);
-  const t = useTranslations();
+export default function SettingsPage() {
+  const t = useTranslations("settings");
 
   return (
     <main className="m-container mb-20 mt-6">
       <div>
-        <h1 className="text-2xl font-bold sm:text-[32px]">
-          {t("settings.title")}
+        <h1 className="text-2xl font-bold leading-[30px] sm:text-[32px] sm:leading-[38px]">
+          {t("title")}
         </h1>
-        <p className="mt-6 sm:text-2xl">{t("settings.desc1")}</p>
-        <p className="my-6 sm:text-2xl">{t("settings.desc2")}</p>
+        <p className="mt-6 leading-[20px]  sm:text-2xl sm:leading-[30px]">
+          {t("desc1")}
+        </p>
+        <p className="my-6 leading-[20px]  sm:text-2xl sm:leading-[30px]">
+          {t("desc2")}
+        </p>
         <ChangePhoneNumber
+          fromQuiz={false}
+          imgSrc="/icons/phone.svg"
           t={{
-            input: t("settings.input"),
             change: t("change"),
-            phoneNumber: t("settings.phoneNumber"),
-            inputPhone: t("settings.inputPhone"),
+            send: t("send"),
+            phoneNumber: t("phoneNumber"),
+            inputPhone: t("inputPhone"),
+            saved: t("saved"),
+            close: t("close"),
           }}
-        />
-        {/* <UserList /> */}
+        >
+          <PhoneBtn text={t("input")} />
+        </ChangePhoneNumber>
       </div>
     </main>
   );

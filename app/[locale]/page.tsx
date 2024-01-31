@@ -1,15 +1,8 @@
-import { Hero } from "@/components/Hero";
-import { unstable_setRequestLocale } from "next-intl/server";
+import { Hero } from "@/components/hero";
 
-type Props = {
-  params: { locale: string };
-};
-
-export default function HomePage({ params: { locale } }: Props) {
-  unstable_setRequestLocale(locale);
-
+export default function HomePage() {
   return (
-    <main className="my-20">
+    <main className="m-container mt-6">
       <Hero />
     </main>
   );

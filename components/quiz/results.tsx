@@ -1,41 +1,40 @@
-"use client";
-
 import { Button } from "../ui/button";
-import { useUserStore } from "@/hooks/user";
-import { DonateButton } from "../DonateButton";
+import { DonateButton } from "../donate-btn";
 import Link from "next/link";
-import { useQuizStore } from "@/hooks/quiz";
+import Image from "next/image";
 
-interface Props {}
+interface Props {
+  t: any;
+  count: number;
+}
 
-export const Results = ({}: Props) => {
-  const { correctAnswersCount } = useQuizStore();
-
+export const Results = ({ t, count }: Props) => {
   return (
     <div className="mb-[200px] mt-12">
-      <div className="flex flex-col items-center">
-        <img src="/icons/firework.png" className="h-24 w-24 scale-x-[-1]" />
-        <h1 className="mt-2 text-[64px] font-bold text-primary">
-          {correctAnswersCount}
+      <div className="flex flex-col items-center text-center">
+        <Image
+          quality={100}
+          alt="firework"
+          src="/icons/firework.png"
+          width={96}
+          height={96}
+          className="md:scale-x-[-1]"
+        />
+        <h1 className="mt-2 text-[64px] font-bold text-primary">{count}</h1>
+        <h1 className="mt-2 text-2xl font-bold leading-[30px] sm:text-[32px] sm:leading-[38px]">
+          {t.congratulations}
         </h1>
-        <h1 className="mt-2  text-center text-2xl font-bold leading-tight sm:text-[32px]">
-          Поздравляем, вы завершили викторину
-        </h1>
-        <p className="mt-6 w-full text-center text-2xl">
-          Теперь вы узнали чуточку больше о жизни нашего Пророка Мухаммада (мир
-          ему и благословение Аллаха).
+        <p className="mt-6 text-base leading-[20px] sm:text-2xl sm:leading-[30px] md:mt-8">
+          {t.desc1}
         </p>
-        <p className="mt-6 w-full text-center text-2xl">
-          Если вам понравилась викторина, вы можете пожертвовать собственные
-          средства на то чтобы и другие люди могли узнать больше о жизни нашего
-          пророка Мухаммада (мир ему и благословение Аллаха). Ваши денежные
-          средства пойдут на формирование призового фонда.
+        <p className="mt-4 text-base leading-[20px] sm:text-2xl sm:leading-[30px] md:mt-8">
+          {t.desc2}
         </p>
         <div className="mt-12 w-full space-y-4">
-          <DonateButton text={"Пожертвовать через Kaspi"} />
+          <DonateButton text={t.kaspi} />
           <Link href="/">
             <Button variant="outline" className="mt-3 w-full">
-              {"На главную"}
+              {t.goHome}
             </Button>
           </Link>
         </div>

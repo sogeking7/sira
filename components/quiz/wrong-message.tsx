@@ -1,43 +1,50 @@
 "use client";
 
 import { Button } from "../ui/button";
-import { useRouter } from "@/navigation";
-import { useQuery } from "react-query";
-import axios from "axios";
-import { useQuizStore } from "@/hooks/quiz";
-import { useUserStore } from "@/hooks/user";
+import { useQuizStore } from "@/stores/quiz";
+import { useUserStore } from "@/stores/user";
+import Image from "next/image";
 
 interface Props {
-  title: string;
+  t: any;
+  selectAnswerTitle: string;
   correctTitle: string;
   setStatus: (value: boolean | null) => void;
-  refetch: () => void;
 }
 
-export const WrongMessage = ({ title, correctTitle, setStatus, refetch }: Props) => {
-  const router = useRouter();
+export const WrongMessage = ({
+  t,
+  selectAnswerTitle,
+  correctTitle,
+  setStatus,
+}: Props) => {
   const { user } = useUserStore();
-  const { initQuiz, isLastQuestion, correctAnswersCount } = useQuizStore();
+  const { isLastQuestion, nextQuestion } = useQuizStore();
 
   const handleNextQuestion = () => {
-    refetch();
+    nextQuestion();
     setStatus(null);
   };
   return (
     <div className="mb-[200px] mt-12">
       <div className="flex flex-col items-center">
-        <img src="/icons/times-round.svg" />
+        <Image
+          width={64}
+          height={64}
+          alt="times-round"
+          src="/icons/times-round.svg"
+        />
         <h1 className="mt-12 text-[20px] font-bold leading-tight sm:text-2xl">
-          Какой из ниже перечисленных ответов правильный?
+          {t.whichIsBelowCorrect}
         </h1>
         <div className="mt-6 w-full rounded-md bg-[#FCECEC] px-3 py-6 text-left transition-colors max-sm:text-sm">
-          {title}
+          {selectAnswerTitle}
         </div>
         <div className="mt-3 w-full rounded-md bg-primary/[12%] px-3 py-6 text-left transition-colors max-sm:text-sm">
           {correctTitle}
         </div>
-        <Button className="mt-3 w-full" onClick={handleNextQuestion}>
-          {isLastQuestion ? "Завершить" : "Следующий вопрос"}
+        <Button className="mt-12 w-full" onClick={handleNextQuestion}>
+          {isLastQuestion ? t.finish : t.nextQuestion}
         </Button>
       </div>
     </div>

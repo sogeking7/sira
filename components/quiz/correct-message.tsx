@@ -1,62 +1,58 @@
 "use client";
 
 import { Button } from "../ui/button";
-import { useRouter } from "@/navigation";
-import { useQuizStore } from "@/hooks/quiz";
-import { useUserStore } from "@/hooks/user";
-import axios from "axios";
-import { useQuery } from "react-query";
-import { useState } from "react";
+import { useQuizStore } from "@/stores/quiz";
+import { useUserStore } from "@/stores/user";
+import Image from "next/image";
+import { ChangePhoneNumber } from "../change-phone-number";
 
 interface Props {
-  title: string;
+  t: any;
+  selectAnswerTitle: string;
   setStatus: (value: boolean | null) => void;
-  refetch: () => void;
 }
 
-export const CorrectMessage = ({ title, setStatus, refetch }: Props) => {
-  const router = useRouter();
-  const { inc } = useUserStore();
-
+export const CorrectMessage = ({ t, selectAnswerTitle, setStatus }: Props) => {
   const { user } = useUserStore();
-  const { initQuiz, correctAnswersCount, isLastQuestion, questionnaireId } =
-    useQuizStore();
-  const [prizeBtnClicked, setPrizeBtnClicked] = useState(false);
+
+  const { isLastQuestion, nextQuestion } = useQuizStore();
 
   const handleNextQuestion = () => {
-    refetch();
+    nextQuestion();
     setStatus(null);
   };
 
-  const handlePrize = () => {
-    setPrizeBtnClicked(true);
-    inc();
-  };
+  // const handlePrize = () => {
+  //   inc();
+  // };
 
   return (
     <div className="mb-[200px] mt-12">
       <div className="flex flex-col items-center">
-        <img src="/icons/tick-round.svg" />
-        <h1 className="mt-12 text-center text-[20px] font-bold leading-tight sm:text-2xl">
-          Какой из ниже перечисленных ответов правильный?
+        <Image
+          width={64}
+          height={64}
+          alt="tick-round"
+          src="/icons/tick-round.svg"
+        />
+        <h1 className="mt-12 text-center text-[20px] font-bold leading-[25px] sm:text-2xl sm:leading-[30px]">
+          {t.whichIsBelowCorrect}
         </h1>
         <div className="mt-6 w-full rounded-md bg-primary/[12%] px-3 py-6 text-left transition-colors max-sm:text-sm">
-          {title}
+          {selectAnswerTitle}
         </div>
-        <Button 
-          disabled={prizeBtnClicked}
-        className="mt-12 w-full" onClick={handlePrize}>
-          Получить подарок
-        </Button>
-        {prizeBtnClicked && (
+        <div className="mt-12 flex w-full flex-col gap-3">
+          <ChangePhoneNumber fromQuiz imgSrc="/icons/prize.svg" t={t}>
+            <Button className="w-full">{t.getPrize}</Button>
+          </ChangePhoneNumber>
           <Button
-            className="mt-3 w-full"
+            className="w-full"
             onClick={handleNextQuestion}
-            variant="outline"
+            variant={user ? "default" : "secondary"}
           >
-            {isLastQuestion ? "Завершить" : "Следующий вопрос"}
+            {isLastQuestion ? t.finish : t.nextQuestion}
           </Button>
-        )}
+        </div>
       </div>
     </div>
   );
