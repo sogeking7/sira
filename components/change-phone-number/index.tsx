@@ -12,8 +12,6 @@ import {
 import { ReactNode, useState } from "react";
 import { Button } from "../ui/button";
 import Image from "next/image";
-import { useUserStore } from "@/stores/user";
-import { cn } from "@/lib/utils";
 import { ChangePhoneForm } from "./form";
 
 interface Props {
@@ -25,8 +23,6 @@ interface Props {
 export const ChangePhoneNumber = ({ t, imgSrc, children }: Props) => {
   const [open1, setIsOpen1] = useState(false);
   const [open, setIsOpen] = useState(false);
-
-  const { user } = useUserStore();
 
   return (
     <>

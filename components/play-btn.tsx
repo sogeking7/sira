@@ -12,13 +12,11 @@ import {
 import Image from "next/image";
 import { Button } from "./ui/button";
 import { useState } from "react";
-import { Loader } from "lucide-react";
 import axios from "axios";
 import { useUserStore } from "@/stores/user";
 import { useQuizStore } from "@/stores/quiz";
 import { useRouter } from "@/navigation";
 import { useQuery } from "react-query";
-import { useAttemptStore } from "@/stores/attempt";
 
 export const PlayBtn = ({ t }: { t: any }) => {
   const router = useRouter();
@@ -26,8 +24,7 @@ export const PlayBtn = ({ t }: { t: any }) => {
   const [open, setIsOpen] = useState(false);
 
   const { user, initUser, setCount } = useUserStore();
-  const { quizId, initQuiz, initQuestion, initQuestionIndex } = useQuizStore();
-  const { lastQuestionIndex } = useAttemptStore();
+  const { quizId, initQuestionIndex } = useQuizStore();
 
   const token = localStorage.getItem("Access_Token");
   const userId = user?.id;

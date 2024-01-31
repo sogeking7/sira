@@ -18,7 +18,6 @@ export const WrongMessage = ({
   correctTitle,
   setStatus,
 }: Props) => {
-  const { user } = useUserStore();
   const { isLastQuestion, nextQuestion } = useQuizStore();
 
   const handleNextQuestion = () => {

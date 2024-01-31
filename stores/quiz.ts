@@ -5,12 +5,9 @@ type Store = {
   quizId: number;
   questions: Question[] | null;
   question: Question | null;
-  progress: number | null;
   isLastQuestion: boolean | null;
-  correctAnswersCount: number;
   collectedAnswers: any;
   questionIndex: number;
-  removeQuiz: () => void;
   nextQuestion: () => void;
   initQuiz: (data: Question[]) => void;
   addCollectedAnswer: (data: any) => void;
@@ -23,21 +20,9 @@ export const useQuizStore = create<Store>()((set) => {
     quizId: 1,
     questions: null,
     question: null,
-    progress: null,
-    correctAnswersCount: 0,
     questionIndex: -1,
     collectedAnswers: [],
     isLastQuestion: false,
-    removeQuiz: () =>
-      set(() => {
-        return {
-          questions: null,
-          question: null,
-          progress: null,
-          correctAnswersCount: 0,
-          collectedAnswers: [],
-        };
-      }),
     initQuiz: (data) =>
       set({
         questions: data,

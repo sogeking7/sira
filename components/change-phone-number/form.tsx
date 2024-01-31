@@ -9,7 +9,6 @@ import { useState } from "react";
 import { useUserStore } from "@/stores/user";
 import { LoaderIcon } from "lucide-react";
 import { useQueryClient } from "react-query";
-import { useQuizStore } from "@/stores/quiz";
 
 const formSchema = z.object({
   phone: z
@@ -32,7 +31,6 @@ export const ChangePhoneForm = ({ t, setOpen, setOpen1 }: Props) => {
   const queryClient = useQueryClient();
 
   const { user } = useUserStore();
-  const { quizId, collectedAnswers } = useQuizStore();
 
   const [loading, setLoading] = useState(false);
   const [state] = useState(user?.phone);

@@ -8,7 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Progress } from "../ui/progress";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
@@ -22,7 +22,6 @@ import { Button } from "../ui/button";
 import { Answer } from "@/types";
 import { useUserStore } from "@/stores/user";
 import { Results } from "./results";
-import { useAttemptStore } from "@/stores/attempt";
 
 interface Props {
   t: any;
@@ -43,7 +42,6 @@ export const Quiz = ({ t }: Props) => {
     questions,
     initQuiz,
     addCollectedAnswer,
-    initQuestion,
     nextQuestion,
     initQuestionIndex,
   } = useQuizStore();
@@ -89,7 +87,7 @@ export const Quiz = ({ t }: Props) => {
     refetchOnReconnect: false,
     refetchInterval: false,
     refetchOnWindowFocus: false,
-    refetchOnMount: false,
+    refetchOnMount: true,
     refetchIntervalInBackground: false,
     enabled: !!userId,
   });
@@ -156,7 +154,7 @@ export const Quiz = ({ t }: Props) => {
           </div>
           <Image
             alt="quiz"
-            src={`/quiz/${question?.id}.png`}
+            src={question?.imageUrl}
             width="0"
             height="0"
             sizes="100vw"
