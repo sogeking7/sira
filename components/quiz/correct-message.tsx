@@ -4,7 +4,7 @@ import { Button } from "../ui/button";
 import { useQuizStore } from "@/stores/quiz";
 import { useUserStore } from "@/stores/user";
 import Image from "next/image";
-import { ChangePhoneNumber } from "../change-phone-number";
+import { SetPhoneNumber } from "../set-phone-number";
 
 interface Props {
   t: any;
@@ -22,10 +22,6 @@ export const CorrectMessage = ({ t, selectAnswerTitle, setStatus }: Props) => {
     setStatus(null);
   };
 
-  // const handlePrize = () => {
-  //   inc();
-  // };
-
   return (
     <div className="mb-[200px] mt-12">
       <div className="flex flex-col items-center">
@@ -42,9 +38,9 @@ export const CorrectMessage = ({ t, selectAnswerTitle, setStatus }: Props) => {
           {selectAnswerTitle}
         </div>
         <div className="mt-12 flex w-full flex-col gap-3">
-          <ChangePhoneNumber fromQuiz imgSrc="/icons/prize.svg" t={t}>
+          <SetPhoneNumber fromQuiz imgSrc="/icons/prize.svg" t={t}>
             <Button className="w-full">{t.getPrize}</Button>
-          </ChangePhoneNumber>
+          </SetPhoneNumber>
           <Button
             className="w-full"
             onClick={handleNextQuestion}

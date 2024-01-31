@@ -50,14 +50,14 @@ export async function GET(
 
     const data = {
       id: newAttempt.id,
-      lastQuestionId: -1,
+      lastQuestionIndex: -1,
       count: 0,
     };
 
     return Response.json(data);
   }
 
-  const lastQuestionId = attempt?.selectedAnswers[0]?.answer?.questionId || -1;
+  const lastQuestionIndex = attempt?.selectedAnswers?.length - 1;
   const correctAnswerCount =
     attempt?.selectedAnswers?.filter((val: any) => val.answer?.isCorrect)
       .length || 0;
@@ -65,7 +65,7 @@ export async function GET(
   const data = {
     attempt,
     id: attempt.id,
-    lastQuestionId,
+    lastQuestionIndex,
     count: correctAnswerCount,
   };
 

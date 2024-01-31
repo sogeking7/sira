@@ -5,10 +5,13 @@ import { useQuizStore } from "@/stores/quiz";
 import Image from "next/image";
 import { useQuery } from "react-query";
 import axios from "axios";
+import { useAttemptStore } from "@/stores/attempt";
 
 export const PrizeCounter = () => {
   const { user, initUser, count, setCount } = useUserStore();
-  const { questions, quizId } = useQuizStore();
+  const { questions, quizId, initQuestionIndex, initQuestion, nextQuestion } =
+    useQuizStore();
+  const { initAttempt } = useAttemptStore();
 
   const token = localStorage.getItem("Access_Token");
   const userId = user?.id;
@@ -31,6 +34,8 @@ export const PrizeCounter = () => {
     queryFn: () => axios.get(`/api/attempt/${userId}/${quizId}`),
     onSuccess: ({ data }) => {
       console.log(data);
+      // initAttempt(data.lastQuestionId);
+      initQuestionIndex(data.lastQuestionIndex);
       setCount(data.count);
     },
     refetchOnReconnect: false,

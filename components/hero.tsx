@@ -5,7 +5,7 @@ import { PlayBtn } from "./play-btn";
 export const Hero = () => {
   const t = useTranslations("hero");
   return (
-    <div className="m-container flex flex-col items-center gap-12 text-center leading-tight">
+    <div className="w-full flex flex-col items-center gap-12 text-center leading-tight">
       <Image
         alt="moon"
         src="/icons/moon.svg"

@@ -18,23 +18,54 @@ import { useUserStore } from "@/stores/user";
 import { useQuizStore } from "@/stores/quiz";
 import { useRouter } from "@/navigation";
 import { useQuery } from "react-query";
+import { useAttemptStore } from "@/stores/attempt";
 
 export const PlayBtn = ({ t }: { t: any }) => {
   const router = useRouter();
 
   const [open, setIsOpen] = useState(false);
 
-  const { user } = useUserStore();
-  const { quizId } = useQuizStore();
+  const { user, initUser, setCount } = useUserStore();
+  const { quizId, initQuiz, initQuestion, initQuestionIndex } = useQuizStore();
+  const { lastQuestionIndex } = useAttemptStore();
 
+  const token = localStorage.getItem("Access_Token");
   const userId = user?.id;
+
+  useQuery({
+    queryKey: ["user", token],
+    queryFn: async () => await axios.post("/api/validate", { token }),
+    onSuccess: ({ data }) => {
+      initUser(data);
+    },
+    refetchOnReconnect: false,
+    refetchInterval: false,
+    refetchOnWindowFocus: false,
+    refetchIntervalInBackground: false,
+    enabled: !!token,
+  });
+
+  useQuery({
+    queryKey: ["attempt", userId],
+    queryFn: () => axios.get(`/api/attempt/${userId}/${quizId}`),
+    onSuccess: ({ data }) => {
+      initQuestionIndex(data.lastQuestionIndex);
+      setCount(data.count);
+    },
+    refetchOnReconnect: false,
+    refetchInterval: false,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchIntervalInBackground: false,
+    enabled: !!userId,
+  });
 
   const handleStartBtn = () => {
     router.push("/quiz");
   };
 
   return (
-    <div>
+    <div className="w-full">
       <Button onClick={handleStartBtn} className="w-full sm:w-[312px]">
         {t.start}
       </Button>

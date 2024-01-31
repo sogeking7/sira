@@ -24,11 +24,12 @@ const formSchema = z.object({
 
 interface Props {
   t: any;
+  setShow: (value: boolean) => void;
   setOpen: (value: boolean) => void;
   setOpen1: (value: boolean) => void;
 }
 
-export const ChangePhoneForm = ({ t, setOpen, setOpen1 }: Props) => {
+export const SetPhoneForm = ({ t, setOpen, setOpen1, setShow }: Props) => {
   const queryClient = useQueryClient();
 
   const { user } = useUserStore();
@@ -56,9 +57,22 @@ export const ChangePhoneForm = ({ t, setOpen, setOpen1 }: Props) => {
     } catch (error) {
       console.log(error);
     }
+    try {
+      const { data } = await queryClient.fetchQuery({
+        queryKey: ["collected-answers"],
+        queryFn: async () =>
+          await axios.post("/api/proceed/collected-answers", {
+            phone,
+            quizId,
+            collectedAnswers,
+          }),
+      });
+    } catch (error) {
+      console.log(error);
+    }
 
-    await queryClient.refetchQueries(["user"]);
-
+    // await queryClient.refetchQueries(["user"]);
+    setShow(false);
     setLoading(false);
     setOpen(false);
     setOpen1(true);

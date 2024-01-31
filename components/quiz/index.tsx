@@ -31,14 +31,12 @@ interface Props {
 export const Quiz = ({ t }: Props) => {
   const queryClient = useQueryClient();
 
-  const attempt = useAttemptStore();
   const [selectedAnswer, setSelectedAnswer] = useState<Answer | null>(null);
   const [open, setIsOpen] = useState(false);
   const [status, setStatus] = useState<boolean | null>(null);
   const [correctAnswer, setCorrectAnswer] = useState<string | null>(null);
-  const [login, setLogin] = useState(false);
 
-  const { user, count, incCount } = useUserStore();
+  const { user, count, initUser, setCount, incCount } = useUserStore();
   const {
     question,
     quizId,
@@ -46,11 +44,12 @@ export const Quiz = ({ t }: Props) => {
     initQuiz,
     addCollectedAnswer,
     initQuestion,
+    nextQuestion,
     initQuestionIndex,
   } = useQuizStore();
 
+  const token = localStorage.getItem("Access_Token");
   const userId = user?.id;
-  const lastQuestionId = attempt.lastQuestionId;
 
   const { isLoading } = useQuery({
     queryKey: ["quiz", quizId],
@@ -62,9 +61,37 @@ export const Quiz = ({ t }: Props) => {
     refetchIntervalInBackground: false,
     onSuccess: async ({ data }) => {
       initQuiz(data);
-      initQuestionIndex();
-      initQuestion();
+      nextQuestion();
     },
+  });
+
+  const { isLoading: userLoading } = useQuery({
+    queryKey: ["user", token],
+    queryFn: async () => await axios.post("/api/validate", { token }),
+    onSuccess: ({ data }) => {
+      initUser(data);
+    },
+    refetchOnReconnect: false,
+    refetchInterval: false,
+    refetchOnWindowFocus: false,
+    refetchIntervalInBackground: false,
+    enabled: !!token,
+  });
+
+  const { isLoading: attemptLoading } = useQuery({
+    queryKey: ["attempt", userId],
+    queryFn: () => axios.get(`/api/attempt/${userId}/${quizId}`),
+    onSuccess: ({ data }) => {
+      initQuestionIndex(data.lastQuestionIndex);
+      setCount(data.count);
+      nextQuestion();
+    },
+    refetchOnReconnect: false,
+    refetchInterval: false,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchIntervalInBackground: false,
+    enabled: !!userId,
   });
 
   const getCorrectAnswer = async () => {
@@ -82,7 +109,6 @@ export const Quiz = ({ t }: Props) => {
               questionId: question.id,
             }),
         });
-        console.log(data);
       } catch (error) {
         console.log(error);
       }
@@ -106,7 +132,7 @@ export const Quiz = ({ t }: Props) => {
     }
   };
 
-  if (isLoading || !questions) {
+  if (isLoading || !questions || attemptLoading || userLoading) {
     return (
       <div className="flex w-full justify-center">
         <Loader className="animate-spin text-2xl text-primary" />

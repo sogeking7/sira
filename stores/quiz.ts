@@ -14,7 +14,7 @@ type Store = {
   nextQuestion: () => void;
   initQuiz: (data: Question[]) => void;
   addCollectedAnswer: (data: any) => void;
-  initQuestionIndex: (index?: number | null) => void;
+  initQuestionIndex: (index: number) => void;
   initQuestion: () => void;
 };
 
@@ -48,14 +48,8 @@ export const useQuizStore = create<Store>()((set) => {
           question: state.questions![state.questionIndex],
         };
       }),
-    initQuestionIndex: (id) =>
-      set((state) => {
-        if (!id) {
-          return {
-            questionIndex: 0,
-          };
-        }
-        const index = state.questions!.findIndex((val) => val.id === id);
+    initQuestionIndex: (index) =>
+      set(() => {
         return {
           questionIndex: index,
         };

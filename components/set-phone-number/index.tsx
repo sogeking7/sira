@@ -12,9 +12,10 @@ import {
 import { ReactNode, useState } from "react";
 import { Button } from "../ui/button";
 import Image from "next/image";
+
 import { useUserStore } from "@/stores/user";
 import { cn } from "@/lib/utils";
-import { ChangePhoneForm } from "./form";
+import { SetPhoneForm } from "./form";
 
 interface Props {
   imgSrc: string;
@@ -22,16 +23,17 @@ interface Props {
   children: ReactNode;
 }
 
-export const ChangePhoneNumber = ({ t, imgSrc, children }: Props) => {
+export const SetPhoneNumber = ({ t, imgSrc, children }: Props) => {
   const [open1, setIsOpen1] = useState(false);
   const [open, setIsOpen] = useState(false);
+  const [show, setShow] = useState(true);
 
   const { user } = useUserStore();
 
   return (
     <>
       <Dialog open={open} onOpenChange={setIsOpen} defaultOpen={open}>
-        <DialogTrigger className={cn(user ? "hidden" : "w-full")}>
+        <DialogTrigger className={cn(show ? "w-full" : "hidden")}>
           {children}
         </DialogTrigger>
         <DialogContent className="w-[312px]">
@@ -40,7 +42,12 @@ export const ChangePhoneNumber = ({ t, imgSrc, children }: Props) => {
             <DialogTitle>{t.phoneNumber}</DialogTitle>
             <DialogDescription>{t.inputPhone}</DialogDescription>
           </DialogHeader>
-          <ChangePhoneForm setOpen={setIsOpen} setOpen1={setIsOpen1} t={t} />
+          <SetPhoneForm
+            setShow={setShow}
+            setOpen={setIsOpen}
+            setOpen1={setIsOpen1}
+            t={t}
+          />
         </DialogContent>
       </Dialog>
 
