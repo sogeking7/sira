@@ -10,15 +10,20 @@ async function main() {
     },
   });
 
-  quiz.forEach(async (question, questionIndex) => {
+  // quiz.forEach(async (question, questionIndex) => {
+  for (let i = 0; i < quiz.length; i++) {
+    const question = quiz[i];
+
     const newQuestion = await prisma.question.create({
       data: {
         questionnaireId: questionnaire.id,
         title: question.title,
-        imageUrl: `/quiz/${questionIndex + 1}.png`,
+        imageUrl: `/quiz/${i + 1}.png`,
       },
     });
-    question.answers.forEach(async (answer, answerIndex) => {
+    // question.answers.forEach(async (answer, answerIndex) => {
+    for (let j = 0; j < question.answers.length; j++) {
+      const answer = question.answers[j];
       await prisma.question.update({
         where: {
           id: newQuestion.id,
@@ -27,13 +32,13 @@ async function main() {
           answers: {
             create: {
               title: answer,
-              isCorrect: answerIndex === question.correctAnswerIndex,
+              isCorrect: j === question.correctAnswerIndex,
             },
           },
         },
       });
-    });
-  });
+    };
+  };
 }
 
 main()
