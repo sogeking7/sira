@@ -64,6 +64,7 @@ export const useQuizStore = create<Store>()((set) => {
 
         if (nextIndex === state.questions!.length) {
           return {
+            isFinished: true,
             question: null,
             questionIndex: -1,
             isLastQuestion: false,

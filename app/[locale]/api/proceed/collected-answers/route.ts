@@ -54,8 +54,12 @@ export async function POST(request: Request) {
       },
     });
 
+    const correctAnswerCount =
+      newAttempt?.selectedAnswers?.filter((val: any) => val.answer?.isCorrect)
+        .length || 0;
+
     return Response.json({
-      ...newAttempt,
+      correctAnswerCount,
       message: "Your answers have been saved",
     });
   }

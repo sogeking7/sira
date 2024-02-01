@@ -35,7 +35,7 @@ export const Quiz = ({ t }: Props) => {
   const [status, setStatus] = useState<boolean | null>(null);
   const [correctAnswer, setCorrectAnswer] = useState<string | null>(null);
 
-  const { user, count, initUser, setCount, incCount } = useUserStore();
+  const { user, count, foo, initUser, setCount, incCount } = useUserStore();
   const {
     question,
     quizId,
@@ -44,7 +44,7 @@ export const Quiz = ({ t }: Props) => {
     addCollectedAnswer,
     nextQuestion,
     initQuestionIndex,
-    setIsFinished
+    setIsFinished,
   } = useQuizStore();
 
   const token = localStorage.getItem("Access_Token");
@@ -84,7 +84,9 @@ export const Quiz = ({ t }: Props) => {
       setIsFinished(data.isFinished);
       initQuestionIndex(data.lastQuestionIndex);
       setCount(data.count);
-      nextQuestion();
+      if (!foo) {
+        nextQuestion();
+      }
     },
     refetchOnReconnect: false,
     refetchInterval: false,

@@ -37,8 +37,8 @@ async function main() {
           },
         },
       });
-    };
-  };
+    }
+  }
 }
 
 main()
