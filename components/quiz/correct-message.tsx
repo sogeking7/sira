@@ -44,7 +44,7 @@ export const CorrectMessage = ({ t, selectAnswerTitle, setStatus }: Props) => {
           <Button
             className="w-full"
             onClick={handleNextQuestion}
-            variant={user ? "default" : "secondary"}
+            variant="outline"
           >
             {isLastQuestion ? t.finish : t.nextQuestion}
           </Button>

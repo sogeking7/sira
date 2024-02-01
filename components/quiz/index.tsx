@@ -44,6 +44,7 @@ export const Quiz = ({ t }: Props) => {
     addCollectedAnswer,
     nextQuestion,
     initQuestionIndex,
+    setIsFinished
   } = useQuizStore();
 
   const token = localStorage.getItem("Access_Token");
@@ -80,6 +81,7 @@ export const Quiz = ({ t }: Props) => {
     queryKey: ["attempt", userId],
     queryFn: () => axios.get(`/api/attempt/${userId}/${quizId}`),
     onSuccess: ({ data }) => {
+      setIsFinished(data.isFinished);
       initQuestionIndex(data.lastQuestionIndex);
       setCount(data.count);
       nextQuestion();
@@ -94,10 +96,10 @@ export const Quiz = ({ t }: Props) => {
 
   const getCorrectAnswer = async () => {
     if (!question || !selectedAnswer) return;
-
+    let userStatus;
     if (userId) {
       try {
-        const { data } = await queryClient.fetchQuery({
+        const { status: statusCode } = await queryClient.fetchQuery({
           queryKey: ["proceed", userId],
           queryFn: async () =>
             await axios.post(`/api/proceed`, {
@@ -107,6 +109,7 @@ export const Quiz = ({ t }: Props) => {
               questionId: question.id,
             }),
         });
+        userStatus = statusCode;
       } catch (error) {
         console.log(error);
       }
@@ -119,7 +122,9 @@ export const Quiz = ({ t }: Props) => {
       });
       const isCorrect = data.id === selectedAnswer.id;
       if (isCorrect) {
-        incCount();
+        if (userStatus) {
+          incCount();
+        }
         addCollectedAnswer(selectedAnswer);
       }
       setCorrectAnswer(data.title);
@@ -131,6 +136,7 @@ export const Quiz = ({ t }: Props) => {
   };
 
   if (isLoading || !questions || attemptLoading || userLoading) {
+    // if (isLoading || !questions) {
     return (
       <div className="flex w-full justify-center">
         <Loader className="animate-spin text-2xl text-primary" />
@@ -140,18 +146,20 @@ export const Quiz = ({ t }: Props) => {
 
   return (
     <div>
+      {question && (
+        <div className="flex flex-col items-center gap-3">
+          <h1 className="text-sm sm:text-base">
+            <b>{question?.id} </b>
+            из {questions?.length}
+          </h1>
+          <Progress
+            value={(question?.id / questions?.length!) * 100}
+            className="w-full"
+          />
+        </div>
+      )}
       {status === null && question && (
         <div>
-          <div className="flex flex-col items-center gap-3">
-            <h1 className="text-sm sm:text-base">
-              <b>{question?.id} </b>
-              из {questions?.length}
-            </h1>
-            <Progress
-              value={(question?.id / questions?.length!) * 100}
-              className="w-full"
-            />
-          </div>
           <Image
             alt="quiz"
             src={question?.imageUrl}

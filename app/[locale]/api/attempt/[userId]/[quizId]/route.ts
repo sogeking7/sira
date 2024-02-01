@@ -13,6 +13,11 @@ export async function GET(
       questionnaireId: quizId,
     },
     include: {
+      questionnaire: {
+        include: {
+          questions: true,
+        },
+      },
       selectedAnswers: {
         orderBy: {
           createdAt: "desc",
@@ -52,6 +57,7 @@ export async function GET(
       id: newAttempt.id,
       lastQuestionIndex: -1,
       count: 0,
+      isFinished: false,
     };
 
     return Response.json(data);
@@ -61,12 +67,15 @@ export async function GET(
   const correctAnswerCount =
     attempt?.selectedAnswers?.filter((val: any) => val.answer?.isCorrect)
       .length || 0;
+  const isFinished =
+    lastQuestionIndex + 1 === attempt?.questionnaire?.questions?.length;
 
   const data = {
     attempt,
     id: attempt.id,
     lastQuestionIndex,
     count: correctAnswerCount,
+    isFinished,
   };
 
   return Response.json(data);

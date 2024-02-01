@@ -24,12 +24,13 @@ export const PlayBtn = ({ t }: { t: any }) => {
   const [open, setIsOpen] = useState(false);
 
   const { user, initUser, setCount } = useUserStore();
-  const { quizId, initQuestionIndex } = useQuizStore();
+  const { quizId, isFinished, initQuestionIndex, setIsFinished } =
+    useQuizStore();
 
   const token = localStorage.getItem("Access_Token");
   const userId = user?.id;
 
-  useQuery({
+  const { isLoading: isUserLoading } = useQuery({
     queryKey: ["user", token],
     queryFn: async () => await axios.post("/api/validate", { token }),
     onSuccess: ({ data }) => {
@@ -42,11 +43,12 @@ export const PlayBtn = ({ t }: { t: any }) => {
     enabled: !!token,
   });
 
-  useQuery({
+  const { isLoading: isAttemptLoading } = useQuery({
     queryKey: ["attempt", userId],
     queryFn: () => axios.get(`/api/attempt/${userId}/${quizId}`),
     onSuccess: ({ data }) => {
       initQuestionIndex(data.lastQuestionIndex);
+      setIsFinished(data.isFinished);
       setCount(data.count);
     },
     refetchOnReconnect: false,
@@ -58,12 +60,20 @@ export const PlayBtn = ({ t }: { t: any }) => {
   });
 
   const handleStartBtn = () => {
+    if (isFinished) {
+      setIsOpen(true);
+      return;
+    }
     router.push("/quiz");
   };
 
   return (
     <div className="w-full">
-      <Button onClick={handleStartBtn} className="w-full sm:w-[312px]">
+      <Button
+        disabled={isUserLoading || isAttemptLoading}
+        onClick={handleStartBtn}
+        className="w-full sm:w-[312px]"
+      >
         {t.start}
       </Button>
       <Dialog open={open} defaultOpen={open} onOpenChange={setIsOpen}>

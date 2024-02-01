@@ -1,4 +1,4 @@
-import { Question } from "@/types";
+import { Answer, Question } from "@/types";
 import { create } from "zustand";
 
 type Store = {
@@ -8,6 +8,8 @@ type Store = {
   isLastQuestion: boolean | null;
   collectedAnswers: any;
   questionIndex: number;
+  isFinished: boolean;
+  setIsFinished: (isFinished: boolean) => void;
   nextQuestion: () => void;
   initQuiz: (data: Question[]) => void;
   addCollectedAnswer: (data: any) => void;
@@ -23,9 +25,26 @@ export const useQuizStore = create<Store>()((set) => {
     questionIndex: -1,
     collectedAnswers: [],
     isLastQuestion: false,
+    isFinished: false,
+    setIsFinished: (isFinished) => set({ isFinished }),
     initQuiz: (data) =>
-      set({
-        questions: data,
+      set(() => {
+        const sortedData = data.map((question) => {
+          let allAnswersObj: Answer | null = null;
+          const sortedAnswers: Answer[] = [];
+          question.answers.forEach((obj) => {
+            if (obj.title === "Все ответы верны") allAnswersObj = obj;
+            else sortedAnswers.push(obj);
+          });
+          if (allAnswersObj) sortedAnswers.push(allAnswersObj);
+          return {
+            ...question,
+            answers: sortedAnswers,
+          };
+        });
+        return {
+          questions: sortedData,
+        };
       }),
     initQuestion: () =>
       set((state) => {

@@ -8,7 +8,13 @@ import axios from "axios";
 
 export const PrizeCounter = () => {
   const { user, initUser, count, setCount } = useUserStore();
-  const { questions, quizId, initQuestionIndex } = useQuizStore();
+  const {
+    questions,
+    quizId,
+    initQuestionIndex,
+    initQuiz,
+    setIsFinished
+  } = useQuizStore();
 
   const token = localStorage.getItem("Access_Token");
   const userId = user?.id;
@@ -31,8 +37,11 @@ export const PrizeCounter = () => {
     queryFn: () => axios.get(`/api/attempt/${userId}/${quizId}`),
     onSuccess: ({ data }) => {
       console.log(data);
+      setIsFinished(data.isFinished);
       // initAttempt(data.lastQuestionId);
       initQuestionIndex(data.lastQuestionIndex);
+      // initQuestionIndex(-1);
+      // nextQuestion();
       setCount(data.count);
     },
     refetchOnReconnect: false,
@@ -43,7 +52,21 @@ export const PrizeCounter = () => {
     enabled: !!userId,
   });
 
-  if (!userId || !questions) {
+  const { isLoading } = useQuery({
+    queryKey: ["quizOnMount", quizId],
+    queryFn: () => axios.get(`/api/quiz/${quizId}`),
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    refetchInterval: false,
+    refetchOnWindowFocus: false,
+    refetchIntervalInBackground: false,
+    onSuccess: async ({ data }) => {
+      initQuiz(data);
+      // nextQuestion();
+    },
+  });
+
+  if (!questions) {
     return null;
   }
 

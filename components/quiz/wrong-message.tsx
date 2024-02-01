@@ -2,7 +2,6 @@
 
 import { Button } from "../ui/button";
 import { useQuizStore } from "@/stores/quiz";
-import { useUserStore } from "@/stores/user";
 import Image from "next/image";
 
 interface Props {
@@ -42,7 +41,11 @@ export const WrongMessage = ({
         <div className="mt-3 w-full rounded-md bg-primary/[12%] px-3 py-6 text-left transition-colors max-sm:text-sm">
           {correctTitle}
         </div>
-        <Button className="mt-12 w-full" onClick={handleNextQuestion}>
+        <Button
+          className="mt-12 w-full"
+          onClick={handleNextQuestion}
+          variant="outline"
+        >
           {isLastQuestion ? t.finish : t.nextQuestion}
         </Button>
       </div>

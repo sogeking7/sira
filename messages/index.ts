@@ -17,7 +17,7 @@ export const messages = {
       title:
         "Знаете ли вы историю жизни пророка Мухаммада (мир ему и благословение Аллаха)?",
       description:
-        "Предлагаем вашему вниманию небольшую подборку в формате «вопрос-ответ» о Пророке Мухаммаде (мир ему и благословение Аллаха). За каждый правильный ответ вы будите получать призы",
+        "Предлагаем вашему вниманию небольшую подборку в формате «вопрос-ответ» о Пророке Мухаммаде (мир ему и благословение Аллаха). За каждый правильный ответ вы будите получать призы.",
       start: "Начать",
       youPassed: "Вы уже прошли викторину",
       youPassedDesc:
@@ -85,7 +85,7 @@ export const messages = {
       title:
         "Сіз Мұхаммед пайғамбарымыз (оған Алланың игілігі мен сәлемі болсын) өмірінің тарихын білетініз бе?",
       description:
-        "Біз сізге Мұхаммед пайғамбарымыз (оған Алланың игілігі мен сәлемі болсын) туралы «сұрақ-жауап» пішіндерін ұсынамыз. Әрбір дұрыс жауап үшін сіз марапаттар аласыз",
+        "Біз сізге Мұхаммед пайғамбарымыз (оған Алланың игілігі мен сәлемі болсын) туралы «сұрақ-жауап» пішіндерін ұсынамыз. Әрбір дұрыс жауап үшін сіз марапаттар аласыз.",
       start: "Бастау",
       youPassed: "Сіз бұл сұрақ-жауапты өткенсіз",
       youPassedDesc:
@@ -153,7 +153,7 @@ export const messages = {
       title:
         "Do you know the history of the life of the Prophet Muhammad (peace be upon him)?",
       description:
-        "We offer you a small selection in the format of “question-answer” about the Prophet Muhammad (peace be upon him). For each correct answer you will receive prizes",
+        "We offer you a small selection in the format of “question-answer” about the Prophet Muhammad (peace be upon him). For each correct answer you will receive prizes.",
       start: "Start",
       youPassed: "You have already passed the quiz",
       youPassedDesc:

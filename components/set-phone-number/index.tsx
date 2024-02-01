@@ -62,7 +62,7 @@ export const SetPhoneNumber = ({ t, imgSrc, children }: Props) => {
             />
             <DialogTitle>{t.saved}</DialogTitle>
           </DialogHeader>
-          <DialogFooter>
+          <DialogFooter className="mt-6">
             <Button className="w-full" onClick={() => setIsOpen1(false)}>
               {t.close}
             </Button>
