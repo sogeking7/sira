@@ -52,6 +52,13 @@ export async function POST(request: Request) {
           })),
         },
       },
+      include: {
+        selectedAnswers: {
+          include: {
+            answer: true,
+          },
+        },
+      },
     });
 
     const correctAnswerCount =

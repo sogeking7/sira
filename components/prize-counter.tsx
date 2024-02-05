@@ -37,9 +37,9 @@ export const PrizeCounter = () => {
     queryFn: () => axios.get(`/api/attempt/${userId}/${quizId}`),
     onSuccess: ({ data }) => {
       console.log(data);
-      setIsFinished(data.isFinished);
+      // setIsFinished(data.isFinished);
       // initAttempt(data.lastQuestionId);
-      initQuestionIndex(data.lastQuestionIndex);
+      // initQuestionIndex(data.lastQuestionIndex);
       // initQuestionIndex(-1);
       // nextQuestion();
       setCount(data.count);
