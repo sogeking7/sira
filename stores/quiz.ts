@@ -10,6 +10,7 @@ type Store = {
   questionIndex: number;
   isFinished: boolean;
   count: number;
+  isQuizEnded: boolean;
   incQuizCount: () => void;
   setIsFinished: (isFinished: boolean) => void;
   nextQuestion: () => void;
@@ -18,6 +19,7 @@ type Store = {
   initQuestionIndex: (index: number) => void;
   initQuestion: () => void;
   resetQuestion: () => void;
+  setIsQuizEnded: (isQuizEnded: boolean) => void;
 };
 
 export const useQuizStore = create<Store>()((set) => {
@@ -30,6 +32,8 @@ export const useQuizStore = create<Store>()((set) => {
     isLastQuestion: false,
     isFinished: false,
     count: 0,
+    isQuizEnded: false,
+    setIsQuizEnded: (isQuizEnded) => set({ isQuizEnded }),
     incQuizCount: () => {
       set((state) => {
         return {
@@ -67,6 +71,7 @@ export const useQuizStore = create<Store>()((set) => {
           };
         });
         return {
+          questionIndex: -1,
           questions: sortedData,
         };
       }),
@@ -84,6 +89,7 @@ export const useQuizStore = create<Store>()((set) => {
             questionIndex: -1,
             isLastQuestion: false,
             count: 0,
+            isQuizEnded: true,
           };
         }
         return {

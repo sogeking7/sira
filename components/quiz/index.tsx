@@ -49,7 +49,8 @@ export const Quiz = ({ t }: Props) => {
     setIsFinished,
     incQuizCount,
     resetQuestion,
-    isLastQuestion
+    isLastQuestion,
+    isQuizEnded,
   } = useQuizStore();
 
   const token = localStorage.getItem("Access_Token");
@@ -65,7 +66,7 @@ export const Quiz = ({ t }: Props) => {
     refetchIntervalInBackground: false,
     onSuccess: async ({ data }) => {
       initQuiz(data);
-      nextQuestion();
+      // nextQuestion();
     },
   });
 
@@ -238,7 +239,7 @@ export const Quiz = ({ t }: Props) => {
         </div>
       )}
 
-      {status === null && !question && <Results t={t} count={quizCount !== count ? quizCount : count} />}
+      {status === null && !question && <Results t={t} count={(quizCount !== count && isQuizEnded ) ? quizCount : count} />}
 
       {status === true && (
         <CorrectMessage
