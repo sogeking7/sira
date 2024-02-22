@@ -47,7 +47,7 @@ export const useQuizStore = create<Store>()((set) => {
           return {
             count: 0,
             question: state.questions[0],
-            questionIndex: -1,
+            questionIndex: 0,
             isLastQuestion: false,
           };
         }
