@@ -66,6 +66,7 @@ export const Quiz = ({ t }: Props) => {
     refetchIntervalInBackground: false,
     onSuccess: async ({ data }) => {
       initQuiz(data);
+      resetQuestion(); 
       // nextQuestion();
     },
   });

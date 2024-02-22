@@ -71,7 +71,7 @@ export const useQuizStore = create<Store>()((set) => {
           };
         });
         return {
-          questionIndex: -1,
+          // questionIndex: -1,
           questions: sortedData,
         };
       }),
