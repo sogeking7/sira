@@ -142,6 +142,10 @@ export const Quiz = ({ t }: Props) => {
     } catch (error) {
       console.log(error);
     }
+    window.scrollTo({
+      top: 0,
+      behavior: "auto",
+    })
     setLoading(false);
   };
 
