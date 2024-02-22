@@ -14,6 +14,7 @@ export const PrizeCounter = () => {
     initQuestionIndex,
     initQuiz,
     setIsFinished
+    
   } = useQuizStore();
 
   const token = localStorage.getItem("Access_Token");

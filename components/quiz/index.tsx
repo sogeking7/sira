@@ -41,14 +41,18 @@ export const Quiz = ({ t }: Props) => {
     question,
     quizId,
     questions,
+    count: quizCount,
     initQuiz,
     addCollectedAnswer,
     nextQuestion,
-    // initQuestionIndex,
-    // setIsFinished,
+    initQuestionIndex,
+    setIsFinished,
+    incQuizCount,
+    resetQuestion,
+    isLastQuestion
   } = useQuizStore();
 
-  // const token = localStorage.getItem("Access_Token");
+  const token = localStorage.getItem("Access_Token");
   const userId = user?.id;
 
   const { isLoading } = useQuery({
@@ -65,37 +69,37 @@ export const Quiz = ({ t }: Props) => {
     },
   });
 
-  // const { isLoading: userLoading } = useQuery({
-  //   queryKey: ["user", token],
-  //   queryFn: async () => await axios.post("/api/validate", { token }),
-  //   onSuccess: ({ data }) => {
-  //     initUser(data);
-  //   },
-  //   refetchOnReconnect: false,
-  //   refetchInterval: false,
-  //   refetchOnWindowFocus: false,
-  //   refetchIntervalInBackground: false,
-  //   enabled: !!token,
-  // });
+  const { isLoading: userLoading } = useQuery({
+    queryKey: ["user", token],
+    queryFn: async () => await axios.post("/api/validate", { token }),
+    onSuccess: ({ data }) => {
+      initUser(data);
+    },
+    refetchOnReconnect: false,
+    refetchInterval: false,
+    refetchOnWindowFocus: false,
+    refetchIntervalInBackground: false,
+    enabled: !!token,
+  });
 
-  // const { isLoading: attemptLoading } = useQuery({
-  //   queryKey: ["attempt", userId],
-  //   queryFn: () => axios.get(`/api/attempt/${userId}/${quizId}`),
-  //   onSuccess: ({ data }) => {
-  //     setIsFinished(data.isFinished);
-  //     initQuestionIndex(data.lastQuestionIndex);
-  //     setCount(data.count);
-  //     if (!foo) {
-  //       nextQuestion();
-  //     }
-  //   },
-  //   refetchOnReconnect: false,
-  //   refetchInterval: false,
-  //   refetchOnWindowFocus: false,
-  //   refetchOnMount: true,
-  //   refetchIntervalInBackground: false,
-  //   enabled: !!userId,
-  // });
+  const { isLoading: attemptLoading } = useQuery({
+    queryKey: ["attempt", userId],
+    queryFn: () => axios.get(`/api/attempt/${userId}/${quizId}`),
+    onSuccess: ({ data }) => {
+      setIsFinished(data.isFinished);
+      initQuestionIndex(data.lastQuestionIndex);
+      setCount(data.count);
+      if (!foo) {
+        nextQuestion();
+      }
+    },
+    refetchOnReconnect: false,
+    refetchInterval: false,
+    refetchOnWindowFocus: false,
+    refetchOnMount: true,
+    refetchIntervalInBackground: false,
+    enabled: !!userId,
+  });
 
   const getCorrectAnswer = async () => {
     if (!question || !selectedAnswer) return;
@@ -129,6 +133,7 @@ export const Quiz = ({ t }: Props) => {
         if (userStatus) {
           incCount();
         }
+        incQuizCount();
         addCollectedAnswer(selectedAnswer);
       }
       setCorrectAnswer(data.title);
@@ -140,8 +145,8 @@ export const Quiz = ({ t }: Props) => {
     setLoading(false);
   };
 
-  // if (isLoading || !questions || attemptLoading || userLoading) {
-  if (isLoading || !questions) {
+  if (isLoading || !questions || attemptLoading || userLoading ) {
+  // if (isLoading || !questions) {
     return (
       <div className="flex w-full justify-center">
         <Loader className="animate-spin text-2xl text-primary" />
@@ -229,7 +234,7 @@ export const Quiz = ({ t }: Props) => {
         </div>
       )}
 
-      {status === null && !question && <Results t={t} count={count} />}
+      {status === null && !question && <Results t={t} count={quizCount !== count ? quizCount : count} />}
 
       {status === true && (
         <CorrectMessage

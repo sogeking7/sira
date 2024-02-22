@@ -70,6 +70,9 @@ export async function GET(
   const isFinished =
     lastQuestionIndex + 1 === attempt?.questionnaire?.questions?.length;
 
+  if (isFinished) {
+  }
+
   const data = {
     attempt,
     id: attempt.id,

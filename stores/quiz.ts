@@ -9,12 +9,15 @@ type Store = {
   collectedAnswers: any;
   questionIndex: number;
   isFinished: boolean;
+  count: number;
+  incQuizCount: () => void;
   setIsFinished: (isFinished: boolean) => void;
   nextQuestion: () => void;
   initQuiz: (data: Question[]) => void;
   addCollectedAnswer: (data: any) => void;
   initQuestionIndex: (index: number) => void;
   initQuestion: () => void;
+  resetQuestion: () => void;
 };
 
 export const useQuizStore = create<Store>()((set) => {
@@ -26,6 +29,27 @@ export const useQuizStore = create<Store>()((set) => {
     collectedAnswers: [],
     isLastQuestion: false,
     isFinished: false,
+    count: 0,
+    incQuizCount: () => {
+      set((state) => {
+        return {
+          count: state.count + 1,
+        };
+      });
+    },
+    resetQuestion: () => {
+      set((state) => {
+        if (state.questions) {
+          return {
+            count: 0,
+            question: state.questions[0],
+            questionIndex: -1,
+            isLastQuestion: false,
+          };
+        }
+        return {};
+      });
+    },
     setIsFinished: (isFinished) => set({ isFinished }),
     initQuiz: (data) =>
       set(() => {
@@ -53,7 +77,15 @@ export const useQuizStore = create<Store>()((set) => {
         };
       }),
     initQuestionIndex: (index) =>
-      set(() => {
+      set((state) => {
+        if (!state.questions) return {};
+        if (index === state.questions?.length - 1) {
+          return {
+            questionIndex: -1,
+            isLastQuestion: false,
+            count: 0,
+          };
+        }
         return {
           questionIndex: index,
         };
@@ -61,7 +93,7 @@ export const useQuizStore = create<Store>()((set) => {
     nextQuestion: () =>
       set((state) => {
         const nextIndex = state.questionIndex + 1;
-
+        console.log("nextIndex", nextIndex);
         if (nextIndex === state.questions!.length) {
           return {
             isFinished: true,

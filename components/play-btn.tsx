@@ -16,12 +16,14 @@ import { useState } from "react";
 // import { useUserStore } from "@/stores/user";
 // import { useQuizStore } from "@/stores/quiz";
 import { useRouter } from "@/navigation";
+import { useQuizStore } from "@/stores/quiz";
 // import { useQuery } from "react-query";
 
 export const PlayBtn = ({ t }: { t: any }) => {
   const router = useRouter();
 
   const [open, setIsOpen] = useState(false);
+  const { resetQuestion } = useQuizStore();
 
   // const { user, initUser, setCount } = useUserStore();
   // const { quizId, isFinished, initQuestionIndex, setIsFinished } =
@@ -64,6 +66,8 @@ export const PlayBtn = ({ t }: { t: any }) => {
     //   setIsOpen(true);
     //   return;
     // }
+    // window.location.href = "/quiz" // hard reload
+    resetQuestion();
     router.push("/quiz");
   };
 
