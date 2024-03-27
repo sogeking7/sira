@@ -5,7 +5,7 @@ import { useQuizStore } from "@/stores/quiz";
 import Image from "next/image";
 import { useQuery } from "react-query";
 import axios from "axios";
-import { useAccessToken } from "@/hooks";
+import { useAccessToken } from "@/hooks/use-access-token";
 
 export const PrizeCounter = () => {
   const token = useAccessToken();

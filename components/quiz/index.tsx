@@ -22,7 +22,7 @@ import { Button } from "../ui/button";
 import { Answer } from "@/types";
 import { useUserStore } from "@/stores/user";
 import { Results } from "./results";
-import { useAccessToken } from "@/hooks";
+import { useAccessToken } from "@/hooks/use-access-token";
 
 interface Props {
   t: any;
