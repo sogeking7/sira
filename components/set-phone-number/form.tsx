@@ -1,3 +1,5 @@
+"use client";
+
 import * as z from "zod";
 import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -49,17 +51,17 @@ export const SetPhoneForm = ({ t, setOpen, setOpen1, setShow }: Props) => {
     const { phone } = values;
     setLoading(true);
     setFoo(true);
-    try {
+
+    {
       const { data } = await queryClient.fetchQuery({
         queryKey: ["auth"],
         queryFn: async () => await axios.post("/api/auth", { phone }),
       });
       localStorage.setItem("Access_Token", data.Access_Token);
-    } catch (error) {
-      console.log(error);
     }
-    try {
-      const { data, status: statusCode } = await queryClient.fetchQuery({
+
+    {
+      const { data } = await queryClient.fetchQuery({
         queryKey: ["collected-answers"],
         queryFn: async () =>
           await axios.post("/api/proceed/collected-answers", {
@@ -68,14 +70,9 @@ export const SetPhoneForm = ({ t, setOpen, setOpen1, setShow }: Props) => {
             collectedAnswers,
           }),
       });
-      // if (statusCode === 200) {
       setCount(data.correctAnswerCount);
-      // }
-    } catch (error) {
-      console.log(error);
     }
 
-    // await queryClient.refetchQueries(["user"]);
     setShow(false);
     setLoading(false);
     setOpen(false);

@@ -1,3 +1,5 @@
+"use client";
+
 import * as z from "zod";
 import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -44,15 +46,15 @@ export const ChangePhoneForm = ({ t, setOpen, setOpen1 }: Props) => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const { phone } = values;
+
     setLoading(true);
-    try {
+
+    {
       const { data } = await queryClient.fetchQuery({
         queryKey: ["auth"],
         queryFn: async () => await axios.post("/api/auth", { phone }),
       });
       localStorage.setItem("Access_Token", data.Access_Token);
-    } catch (error) {
-      console.log(error);
     }
 
     await queryClient.refetchQueries(["user"]);

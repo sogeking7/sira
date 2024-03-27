@@ -7,9 +7,8 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "../ui/dialog";
-import { ReactNode, useState } from "react";
+import { useState } from "react";
 import { Button } from "../ui/button";
 import Image from "next/image";
 
@@ -20,10 +19,9 @@ import { SetPhoneForm } from "./form";
 interface Props {
   imgSrc: string;
   t: any;
-  children: ReactNode;
 }
 
-export const SetPhoneNumber = ({ t, imgSrc, children }: Props) => {
+export const SetPhoneNumber = ({ t, imgSrc }: Props) => {
   const [open1, setIsOpen1] = useState(false);
   const [open, setIsOpen] = useState(false);
   const [show, setShow] = useState(true);
@@ -33,9 +31,12 @@ export const SetPhoneNumber = ({ t, imgSrc, children }: Props) => {
   return (
     <>
       <Dialog open={open} onOpenChange={setIsOpen} defaultOpen={open}>
-        <DialogTrigger className={cn(show && !user ? "w-full" : "hidden")}>
-          {children}
-        </DialogTrigger>
+        <Button
+          onClick={() => setIsOpen((prev) => !prev)}
+          className={cn(show && !user ? "w-full" : "hidden")}
+        >
+          {t.getPrize}
+        </Button>
         <DialogContent className="w-[312px]">
           <DialogHeader className="items-center">
             <Image width={64} height={64} alt="phone" src={imgSrc} />
