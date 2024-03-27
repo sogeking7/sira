@@ -1,6 +1,5 @@
 import { useTranslations } from "next-intl";
 import { ChangePhoneNumber } from "@/components/change-phone-number";
-import { PhoneBtn } from "@/components/change-phone-number/phone-btn";
 
 export default function SettingsPage() {
   const t = useTranslations("settings");
@@ -26,10 +25,9 @@ export default function SettingsPage() {
             inputPhone: t("inputPhone"),
             saved: t("saved"),
             close: t("close"),
+            input: t("input"),
           }}
-        >
-          <PhoneBtn text={t("input")} />
-        </ChangePhoneNumber>
+        />
       </div>
     </main>
   );
