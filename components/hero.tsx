@@ -1,11 +1,12 @@
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-import { PlayBtn } from "./play-btn";
+import { Button } from "./ui/button";
+import Link from "next/link";
 
 export const Hero = () => {
   const t = useTranslations("hero");
   return (
-    <div className="w-full flex flex-col items-center gap-12 text-center leading-tight">
+    <div className="flex w-full flex-col items-center gap-12 text-center leading-tight">
       <Image
         alt="moon"
         src="/icons/moon.svg"
@@ -21,14 +22,9 @@ export const Hero = () => {
           {t("description")}
         </p>
       </div>
-      <PlayBtn
-        t={{
-          start: t("start"),
-          youPassed: t("youPassed"),
-          youPassedDesc: t("youPassedDesc"),
-          ok: t("ok"),
-        }}
-      />
+      <Link href="/quiz">
+        <Button className="w-full sm:w-[312px]">{t("start")}</Button>
+      </Link>
     </div>
   );
 };
