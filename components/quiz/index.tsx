@@ -22,12 +22,15 @@ import { Button } from "../ui/button";
 import { Answer } from "@/types";
 import { useUserStore } from "@/stores/user";
 import { Results } from "./results";
+import { useAccessToken } from "@/hooks";
 
 interface Props {
   t: any;
 }
 
 export const Quiz = ({ t }: Props) => {
+  const token = useAccessToken();
+
   const queryClient = useQueryClient();
 
   const [selectedAnswer, setSelectedAnswer] = useState<Answer | null>(null);
@@ -53,7 +56,6 @@ export const Quiz = ({ t }: Props) => {
     isQuizEnded,
   } = useQuizStore();
 
-  const token = localStorage.getItem("Access_Token");
   const userId = user?.id;
 
   const { isLoading } = useQuery({
@@ -66,7 +68,7 @@ export const Quiz = ({ t }: Props) => {
     refetchIntervalInBackground: false,
     onSuccess: async ({ data }) => {
       initQuiz(data);
-      resetQuestion(); 
+      resetQuestion();
       // nextQuestion();
     },
   });
@@ -147,12 +149,12 @@ export const Quiz = ({ t }: Props) => {
     window.scrollTo({
       top: 0,
       behavior: "auto",
-    })
+    });
     setLoading(false);
   };
 
-  if (isLoading || !questions || attemptLoading || userLoading ) {
-  // if (isLoading || !questions) {
+  if (isLoading || !questions || attemptLoading || userLoading) {
+    // if (isLoading || !questions) {
     return (
       <div className="flex w-full justify-center">
         <Loader className="animate-spin text-2xl text-primary" />
@@ -240,7 +242,12 @@ export const Quiz = ({ t }: Props) => {
         </div>
       )}
 
-      {status === null && !question && <Results t={t} count={(quizCount !== count && isQuizEnded ) ? quizCount : count} />}
+      {status === null && !question && (
+        <Results
+          t={t}
+          count={quizCount !== count && isQuizEnded ? quizCount : count}
+        />
+      )}
 
       {status === true && (
         <CorrectMessage

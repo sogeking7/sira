@@ -5,19 +5,15 @@ import { useQuizStore } from "@/stores/quiz";
 import Image from "next/image";
 import { useQuery } from "react-query";
 import axios from "axios";
+import { useAccessToken } from "@/hooks";
 
 export const PrizeCounter = () => {
-  const { user, initUser, count, setCount } = useUserStore();
-  const {
-    questions,
-    quizId,
-    initQuestionIndex,
-    initQuiz,
-    setIsFinished
-    
-  } = useQuizStore();
+  const token = useAccessToken();
 
-  const token = localStorage.getItem("Access_Token");
+  const { user, initUser, count, setCount } = useUserStore();
+  const { questions, quizId, initQuestionIndex, initQuiz, setIsFinished } =
+    useQuizStore();
+
   const userId = user?.id;
 
   useQuery({
