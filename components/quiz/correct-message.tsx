@@ -2,23 +2,23 @@
 
 import { Button } from "../ui/button";
 import { useQuizStore } from "@/stores/quiz";
-import { useUserStore } from "@/stores/user";
 import Image from "next/image";
 import { SetPhoneNumber } from "../set-phone-number";
 
 interface Props {
   t: any;
   selectAnswerTitle: string;
-  setStatus: (value: boolean | null) => void;
+  setStatus: (value: "end" | null) => void;
 }
 
 export const CorrectMessage = ({ t, selectAnswerTitle, setStatus }: Props) => {
-  const { user } = useUserStore();
-
-  const { isLastQuestion, nextQuestion } = useQuizStore();
+  const { isLastQuestion } = useQuizStore();
 
   const handleNextQuestion = () => {
-    nextQuestion();
+    if (isLastQuestion) {
+      setStatus("end");
+      return;
+    }
     setStatus(null);
   };
 

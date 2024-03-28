@@ -11,7 +11,6 @@ import {
 import { useState } from "react";
 import { Button } from "../ui/button";
 import Image from "next/image";
-
 import { useUserStore } from "@/stores/user";
 import { cn } from "@/lib/utils";
 import { SetPhoneForm } from "./form";
@@ -26,18 +25,23 @@ export const SetPhoneNumber = ({ t, imgSrc }: Props) => {
   const [open, setIsOpen] = useState(false);
   const [show, setShow] = useState(true);
 
-  const { user } = useUserStore();
+  const { id: userId } = useUserStore();
 
   return (
     <>
       <Dialog open={open} onOpenChange={setIsOpen} defaultOpen={open}>
         <Button
           onClick={() => setIsOpen((prev) => !prev)}
-          className={cn(show && !user ? "w-full" : "hidden")}
+          className={cn(show && !userId ? "w-full" : "hidden")}
         >
           {t.getPrize}
         </Button>
-        <DialogContent className="w-[312px]">
+        <DialogContent
+          onInteractOutside={(e) => {
+            e.preventDefault();
+          }}
+          className="w-[312px]"
+        >
           <DialogHeader className="items-center">
             <Image width={64} height={64} alt="phone" src={imgSrc} />
             <DialogTitle>{t.phoneNumber}</DialogTitle>

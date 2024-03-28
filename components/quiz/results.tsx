@@ -2,6 +2,8 @@ import { Button } from "../ui/button";
 import { DonateButton } from "../donate-btn";
 import Link from "next/link";
 import Image from "next/image";
+import { useQuizStore } from "@/stores/quiz";
+import { useRouter } from "@/navigation";
 
 interface Props {
   t: any;
@@ -9,6 +11,9 @@ interface Props {
 }
 
 export const Results = ({ t, count }: Props) => {
+  const router = useRouter();
+  const quiz = useQuizStore();
+
   return (
     <div className="mb-[200px] mt-12">
       <div className="flex flex-col items-center text-center">
@@ -32,11 +37,16 @@ export const Results = ({ t, count }: Props) => {
         </p>
         <div className="mt-12 w-full space-y-4">
           <DonateButton text={t.kaspi} />
-          <Link href="/">
-            <Button variant="outline" className="mt-3 w-full">
-              {t.goHome}
-            </Button>
-          </Link>
+          <Button
+            onClick={() => {
+              router.push("/");
+              quiz.resetQuestion();
+            }}
+            variant="outline"
+            className="mt-3 w-full"
+          >
+            {t.goHome}
+          </Button>
         </div>
       </div>
     </div>

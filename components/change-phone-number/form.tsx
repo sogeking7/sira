@@ -32,15 +32,15 @@ interface Props {
 export const ChangePhoneForm = ({ t, setOpen, setOpen1 }: Props) => {
   const queryClient = useQueryClient();
 
-  const { user } = useUserStore();
+  const user = useUserStore();
 
   const [loading, setLoading] = useState(false);
-  const [state] = useState(user?.phone);
+  const [state] = useState(() => user.phone);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      phone: state,
+      phone: state ?? "",
     },
   });
 
@@ -49,15 +49,24 @@ export const ChangePhoneForm = ({ t, setOpen, setOpen1 }: Props) => {
 
     setLoading(true);
 
-    {
-      const { data } = await queryClient.fetchQuery({
-        queryKey: ["auth"],
-        queryFn: async () => await axios.post("/api/auth", { phone }),
-      });
+    let token = null;
+
+    try {
+      const { data } = await axios.post("/api/auth", { phone });
       localStorage.setItem("Access_Token", data.Access_Token);
+      token = data.Access_Token;
+    } catch (err) {
+      console.error(err);
     }
 
-    await queryClient.refetchQueries(["user"]);
+    try {
+      const { data } = await axios.post("/api/validate", {
+        token,
+      });
+      user.initUser(data);
+    } catch (err) {
+      console.error(err);
+    }
 
     setLoading(false);
     setOpen(false);

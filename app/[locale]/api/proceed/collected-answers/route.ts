@@ -61,13 +61,20 @@ export async function POST(request: Request) {
       },
     });
 
+    const lastQuestionIndex = newAttempt?.selectedAnswers?.length - 1;
     const correctAnswerCount =
       newAttempt?.selectedAnswers?.filter((val: any) => val.answer?.isCorrect)
         .length || 0;
+    const isFinished =
+      lastQuestionIndex + 1 === newAttempt?.questionnaire?.questions?.length;
 
     return Response.json({
-      correctAnswerCount,
+      newAttempt,
+      id: newAttempt?.id,
+      lastQuestionIndex,
+      count: correctAnswerCount,
       message: "Your answers have been saved",
+      isFinished,
     });
   }
 

@@ -8,7 +8,7 @@ export async function POST(request: Request) {
   const answerId = body.answerId;
   const questionId = body.questionId;
 
-  const attempt = await prisma.attempt.findFirst({
+  let attempt = await prisma.attempt.findFirst({
     where: {
       userId,
       questionnaireId: quizId,
@@ -16,8 +16,8 @@ export async function POST(request: Request) {
     include: {
       selectedAnswers: {
         include: {
-          answer: true
-        }
+          answer: true,
+        },
       },
     },
   });
@@ -51,8 +51,8 @@ export async function POST(request: Request) {
       },
     },
     include: {
-      selectedAnswers: true
-    }
+      selectedAnswers: true,
+    },
   });
 
   return Response.json({

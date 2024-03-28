@@ -8,7 +8,7 @@ interface Props {
   t: any;
   selectAnswerTitle: string;
   correctTitle: string;
-  setStatus: (value: boolean | null) => void;
+  setStatus: (value: "end" | null) => void;
 }
 
 export const WrongMessage = ({
@@ -17,10 +17,13 @@ export const WrongMessage = ({
   correctTitle,
   setStatus,
 }: Props) => {
-  const { isLastQuestion, nextQuestion } = useQuizStore();
+  const { isLastQuestion } = useQuizStore();
 
   const handleNextQuestion = () => {
-    nextQuestion();
+    if (isLastQuestion) {
+      setStatus("end");
+      return;
+    }
     setStatus(null);
   };
   return (

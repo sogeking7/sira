@@ -7,32 +7,65 @@ export async function GET(
   const userId = params.userId;
   const quizId = parseInt(params.quizId);
 
-  let attempt = await prisma.attempt.findFirst({
-    where: {
-      userId,
-      questionnaireId: quizId,
-    },
-    include: {
-      questionnaire: {
-        include: {
-          questions: true,
+  let attempt;
+
+  if (userId[0] === "+") {
+    attempt = await prisma.attempt.findFirst({
+      where: {
+        user: {
+          phone: userId,
         },
+        questionnaireId: quizId,
       },
-      selectedAnswers: {
-        orderBy: {
-          createdAt: "desc",
+      include: {
+        questionnaire: {
+          include: {
+            questions: true,
+          },
         },
-        select: {
-          answer: {
-            select: {
-              questionId: true,
-              isCorrect: true,
+        selectedAnswers: {
+          orderBy: {
+            createdAt: "desc",
+          },
+          select: {
+            answer: {
+              select: {
+                questionId: true,
+                isCorrect: true,
+              },
             },
           },
         },
       },
-    },
-  });
+    });
+  } else {
+    attempt = await prisma.attempt.findFirst({
+      where: {
+        userId,
+        questionnaireId: quizId,
+      },
+      include: {
+        questionnaire: {
+          include: {
+            questions: true,
+          },
+        },
+        selectedAnswers: {
+          orderBy: {
+            createdAt: "desc",
+          },
+          select: {
+            answer: {
+              select: {
+                questionId: true,
+                isCorrect: true,
+              },
+            },
+          },
+        },
+      },
+    });
+  }
 
   if (!attempt) {
     const newAttempt = await prisma.attempt.create({
@@ -69,9 +102,6 @@ export async function GET(
       .length || 0;
   const isFinished =
     lastQuestionIndex + 1 === attempt?.questionnaire?.questions?.length;
-
-  if (isFinished) {
-  }
 
   const data = {
     attempt,

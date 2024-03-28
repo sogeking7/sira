@@ -28,3 +28,5 @@ export type Answer = {
   title: string;
   isCorrect?: boolean;
 };
+
+export type Token = string | null;

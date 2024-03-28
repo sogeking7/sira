@@ -34,49 +34,65 @@ interface Props {
 export const SetPhoneForm = ({ t, setOpen, setOpen1, setShow }: Props) => {
   const queryClient = useQueryClient();
 
-  const { user, setFoo, setCount } = useUserStore();
-  const { quizId, collectedAnswers } = useQuizStore();
+  const { id: userId, phone, ...user } = useUserStore();
+  const { id: quizId, collectedAnswers, ...quiz } = useQuizStore();
 
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [state] = useState(user?.phone);
+  const [state] = useState(phone);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      phone: state,
+      phone: state ?? "",
     },
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const { phone } = values;
     setLoading(true);
-    setFoo(true);
+    setError("");
+    user.setFoo(true);
 
-    {
-      const { data } = await queryClient.fetchQuery({
-        queryKey: ["auth"],
-        queryFn: async () => await axios.post("/api/auth", { phone }),
-      });
+    let token = null;
+
+    try {
+      const { data } = await axios.post("/api/auth", { phone });
       localStorage.setItem("Access_Token", data.Access_Token);
+      token = data.Access_Token;
+    } catch (err) {
+      console.error(err);
     }
 
-    {
-      const { data } = await queryClient.fetchQuery({
-        queryKey: ["collected-answers"],
-        queryFn: async () =>
-          await axios.post("/api/proceed/collected-answers", {
-            phone,
-            quizId,
-            collectedAnswers,
-          }),
+    try {
+      const { data } = await axios.post("/api/validate", {
+        token,
       });
-      setCount(data.correctAnswerCount);
+      user.initUser(data);
+    } catch (err) {
+      console.error(err);
     }
 
+    try {
+      const { data } = await axios.post("/api/proceed/collected-answers", {
+        phone,
+        quizId,
+        collectedAnswers,
+      });
+      quiz.setIsFinished(data.isFinished);
+      quiz.initQuestionIndex(data.lastQuestionIndex);
+      user.setCount(data.count);
+      if (!user.foo) {
+        quiz.nextQuestion();
+      }
+    } catch (err) {
+      console.error(err);
+    }
+    
     setShow(false);
-    setLoading(false);
     setOpen(false);
     setOpen1(true);
+    setLoading(false);
   };
 
   return (
@@ -111,6 +127,9 @@ export const SetPhoneForm = ({ t, setOpen, setOpen1, setShow }: Props) => {
           >
             {state ? t.change : t.send}
           </Button>
+        )}
+        {form.formState.errors.phone && (
+          <p>{form.formState.errors.phone.message}</p>
         )}
       </form>
     </Form>

@@ -5,6 +5,7 @@ import LocaleSwitcher from "../locale-switcher";
 import { useTranslations } from "next-intl";
 import { NavItem } from "@/types";
 import { Navigations } from "./navigations";
+import { useQuizStore } from "@/stores/quiz";
 
 export const Header = () => {
   const t = useTranslations("nav");

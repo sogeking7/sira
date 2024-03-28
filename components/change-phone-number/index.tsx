@@ -25,14 +25,14 @@ export const ChangePhoneNumber = ({ t, imgSrc }: Props) => {
   const [open1, setIsOpen1] = useState(false);
   const [open, setIsOpen] = useState(false);
 
-  const user = useUserStore();
+  const { phone } = useUserStore();
 
   return (
     <>
       <Dialog open={open} onOpenChange={setIsOpen} defaultOpen={open}>
         <DialogTrigger className="w-full">
           <div className="m-0 flex h-auto w-full items-center justify-between rounded-md bg-[#f5f5f5] px-4 py-5 font-normal text-black hover:bg-[#dcdcdc]/[50%]">
-            <p>{user.user?.phone || t.input}</p>
+            <p>{phone || t.input}</p>
             <ChevronRight className="text-black/[12%]" />
           </div>
         </DialogTrigger>

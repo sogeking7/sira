@@ -22,7 +22,7 @@ export const Hero = () => {
           {t("description")}
         </p>
       </div>
-      <Link href="/quiz">
+      <Link href="/quiz" className="w-full">
         <Button className="w-full sm:w-[312px]">{t("start")}</Button>
       </Link>
     </div>
