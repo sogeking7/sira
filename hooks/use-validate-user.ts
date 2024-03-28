@@ -1,9 +1,9 @@
 import { useUserStore } from "@/stores/user";
 import { Token } from "@/types";
 import axios from "axios";
-import { useQuery } from "react-query";
+import { UseQueryResult, useQuery } from "react-query";
 
-export const useValidateUser = (token: Token) => {
+export const useValidateUser = (token: Token): UseQueryResult => {
   const user = useUserStore();
 
   return useQuery(
@@ -20,6 +20,7 @@ export const useValidateUser = (token: Token) => {
       refetchOnMount: false,
       refetchIntervalInBackground: false,
       enabled: !!token,
+      retry: false
     },
   );
 };

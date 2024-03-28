@@ -1,4 +1,4 @@
-import { QuizWrapper } from "@/components/quiz/quiz-wrapper";
+import { QuizWrapper } from "@/components/quiz/wrapper";
 import { useTranslations } from "next-intl";
 
 export default function QuizPage() {
@@ -7,6 +7,7 @@ export default function QuizPage() {
     <main className="m-container my-6">
       <QuizWrapper
         t={{
+          phoneTaken: t('phoneTaken'),
           change: t("quiz.change"),
           send: t("quiz.send"),
           phoneNumber: t("quiz.phoneNumber"),

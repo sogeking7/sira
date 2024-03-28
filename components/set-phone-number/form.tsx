@@ -10,8 +10,9 @@ import { Button } from "../ui/button";
 import { useState } from "react";
 import { useUserStore } from "@/stores/user";
 import { LoaderIcon } from "lucide-react";
-import { useQueryClient } from "react-query";
 import { useQuizStore } from "@/stores/quiz";
+import { User } from "@/types";
+import { useQueryClient } from "react-query";
 
 const formSchema = z.object({
   phone: z
@@ -37,7 +38,6 @@ export const SetPhoneForm = ({ t, setOpen, setOpen1, setShow }: Props) => {
   const { id: userId, phone, ...user } = useUserStore();
   const { id: quizId, collectedAnswers, ...quiz } = useQuizStore();
 
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [state] = useState(phone);
 
@@ -51,54 +51,55 @@ export const SetPhoneForm = ({ t, setOpen, setOpen1, setShow }: Props) => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const { phone } = values;
     setLoading(true);
-    setError("");
-    // user.setFoo(true);
 
+    let error = false;
     let token = null;
-    let userData = null;
+    let userData: User | null = null;
 
-    try {
-      const { data } = await axios.post("/api/auth", { phone });
-      localStorage.setItem("Access_Token", data.Access_Token);
-      token = data.Access_Token;
-    } catch (err) {
-      console.error(err);
-    }
-
-    try {
-      const { data } = await axios.post("/api/validate", {
-        token,
-      });
-      userData = data;
-    } catch (err) {
-      console.error(err);
-    }
-
-    try {
-      const { data } = await axios.post("/api/proceed/collected-answers", {
+    await axios
+      .post("/api/proceed/collected-answers", {
         phone,
         quizId,
         collectedAnswers,
+      })
+      .then(() => {
+        setShow(false);
+        setOpen(false);
+        setOpen1(true);
+      })
+      .catch((err) => {
+        error = true;
+        const type = err.response.data.type;
+        // const errorMessage = err.response.data.message;
+        if (type === "phone-taken") {
+          form.setError("phone", {
+            type: "phone-taken",
+            message: t.phoneTaken,
+          });
+        }
       });
-      user.initUser(userData);
-      quiz.setIsFinished(data.isFinished);
-      if (!data.isFinished) {
-        quiz.initQuestionIndex(data.lastQuestionIndex);
-      } else {
-        quiz.resetQuestion();
+
+    if (!error) {
+      try {
+        const { data } = await axios.post("/api/auth", { phone });
+        localStorage.setItem("Access_Token", data.Access_Token);
+        token = data.Access_Token;
+      } catch (err) {
+        console.error(err);
       }
-      user.setCount(data.count);
-      if (!user.foo) {
-        // quiz.nextQuestion();
-        console.log("FOO");
+
+      try {
+        const { data } = await axios.post("/api/validate", {
+          token,
+        });
+        userData = data;
+        user.initUser(data);
+        user.setPrize(user.count);
+      } catch (err) {
+        console.error(err);
       }
-    } catch (err) {
-      console.error(err);
     }
 
-    setShow(false);
-    setOpen(false);
-    setOpen1(true);
     setLoading(false);
   };
 
@@ -109,17 +110,26 @@ export const SetPhoneForm = ({ t, setOpen, setOpen1, setShow }: Props) => {
           control={form.control}
           name="phone"
           render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Input
-                  type="tel"
-                  readOnly={loading}
-                  // mask="+7 (999)-999-99-99"
-                  placeholder="+7 (___)-___-__-__"
-                  {...field}
-                />
-              </FormControl>
-            </FormItem>
+            <>
+              <FormItem>
+                <FormControl>
+                  <>
+                    <Input
+                      type="tel"
+                      readOnly={loading}
+                      mask="+7 (999)-999-99-99"
+                      placeholder="+7 (___)-___-__-__"
+                      {...field}
+                    />
+                    {form.formState.errors.phone?.type === "phone-taken" && (
+                      <p className="text-sm text-red-500">
+                        {form.formState.errors.phone.message}
+                      </p>
+                    )}
+                  </>
+                </FormControl>
+              </FormItem>
+            </>
           )}
         />
         {loading ? (
@@ -134,9 +144,6 @@ export const SetPhoneForm = ({ t, setOpen, setOpen1, setShow }: Props) => {
           >
             {state ? t.change : t.send}
           </Button>
-        )}
-        {form.formState.errors.phone && (
-          <p>{form.formState.errors.phone.message}</p>
         )}
       </form>
     </Form>

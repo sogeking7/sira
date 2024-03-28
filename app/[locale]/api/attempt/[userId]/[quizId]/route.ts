@@ -47,7 +47,11 @@ export async function GET(
       include: {
         questionnaire: {
           include: {
-            questions: true,
+            questions: {
+              include: {
+                answers: true,
+              },
+            },
           },
         },
         selectedAnswers: {
@@ -84,9 +88,21 @@ export async function GET(
           create: [],
         },
       },
+      include: {
+        questionnaire: {
+          include: {
+            questions: {
+              include: {
+                answers: true,
+              },
+            },
+          },
+        },
+      },
     });
 
     const data = {
+      questions: newAttempt.questionnaire.questions,
       id: newAttempt.id,
       lastQuestionIndex: -1,
       count: 0,
@@ -104,7 +120,7 @@ export async function GET(
     lastQuestionIndex + 1 === attempt?.questionnaire?.questions?.length;
 
   const data = {
-    attempt,
+    questions: attempt.questionnaire.questions,
     id: attempt.id,
     lastQuestionIndex,
     count: correctAnswerCount,

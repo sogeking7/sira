@@ -8,7 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Progress } from "../ui/progress";
 import Image from "next/image";
 import { cn, scrollToTop } from "@/lib/utils";
@@ -21,56 +21,71 @@ import { Button } from "../ui/button";
 import { Answer } from "@/types";
 import { useUserStore } from "@/stores/user";
 import { Results } from "./results";
-import { useAccessToken } from "@/hooks/use-access-token";
-import { useValidateUser } from "@/hooks/use-validate-user";
-import { useQuiz } from "@/hooks/use-quiz";
-import { useAttempt } from "@/hooks/use-attempt";
+import axios from "axios";
 
 interface Props {
   t: any;
 }
 
 export const Quiz = ({ t }: Props) => {
-  const token = useAccessToken();
-
   const queryClient = useQueryClient();
 
   const [selectedAnswer, setSelectedAnswer] = useState<Answer | null>(null);
   const [open, setIsOpen] = useState(false);
-  const [status, setStatus] = useState<"correct" | "incorrect" | "end" | null>(
-    null,
-  );
   const [correctAnswer, setCorrectAnswer] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   const { id: userId, ...user } = useUserStore();
-  const { id: quizId, questions, question, ...quiz } = useQuizStore();
+  const {
+    id: quizId,
+    questions,
+    question,
+    status,
+    setStatus,
+    ...quiz
+  } = useQuizStore();
 
-  const { isLoading: quizLoading } = useQuiz({
-    quiz_id: quizId,
-    onSuccess: (data) => {
-      quiz.initQuiz(data);
-      quiz.resetQuestion();
-    },
-  });
-  const { isLoading: userLoading } = useValidateUser(token);
-  const { isLoading: attemptLoading } = useAttempt({
-    user_id: userId,
-    quiz_id: quizId,
-    onSuccess: (data) => {
-      quiz.setIsFinished(data.isFinished);
-      if (!data.isFinished) {
-        quiz.initQuestionIndex(data.lastQuestionIndex);
-      } else {
+  useEffect(() => {
+    const fetchQuiz = async () => {
+      try {
+        const { data } = await queryClient.fetchQuery({
+          queryKey: ["quiz", quizId],
+          queryFn: () => axios.get(`/api/quiz/${quizId}`),
+        });
+        quiz.initQuiz(data);
         quiz.resetQuestion();
+      } catch (err) {
+        console.log(err);
       }
-      user.setCount(data.count);
-      if (!user.foo) {
-        // quiz.nextQuestion();
-        console.log("FOO");
+    };
+
+    const fetchAttempt = async () => {
+      try {
+        const { data } = await queryClient.fetchQuery({
+          queryKey: ["attempt"],
+          queryFn: () => axios.get(`/api/attempt/${userId}/${quizId}`),
+        });
+        quiz.initQuiz(data.questions);
+        quiz.setIsFinished(data.isFinished);
+        if (!data.isFinished) {
+          quiz.initQuestionIndex(data.lastQuestionIndex);
+          quiz.initQuestion();
+          quiz.nextQuestion();
+        } else {
+          quiz.resetQuestion();
+        }
+        user.setPrize(data.count);
+      } catch (err) {
+        console.error(err);
       }
-    },
-  });
+    };
+
+    if (!userId) {
+      fetchQuiz();
+    } else {
+      fetchAttempt();
+    }
+  }, []);
 
   const handleClickAnswer = async () => {
     if (!question || !selectedAnswer) return;
@@ -107,15 +122,12 @@ export const Quiz = ({ t }: Props) => {
     const isCorrect = data.id === selectedAnswer.id;
 
     if (isCorrect) {
-      if (userId && saveAnswerStatus) {
-        user.incCount();
+      if (saveAnswerStatus) {
+        user.incPrize();
       }
-      quiz.incQuizCount();
+      user.incCount();
     }
 
-    if (!userId) {
-      quiz.nextQuestion();
-    }
     setCorrectAnswer(data.title);
     setStatus(isCorrect ? "correct" : "incorrect");
     setIsOpen(false);
@@ -123,7 +135,7 @@ export const Quiz = ({ t }: Props) => {
     setLoading(false);
   };
 
-  if (quizLoading || !questions || userLoading || attemptLoading) {
+  if (!questions) {
     return (
       <div className="flex w-full justify-center">
         <Loader className="animate-spin text-2xl text-primary" />
@@ -133,18 +145,21 @@ export const Quiz = ({ t }: Props) => {
 
   return (
     <div>
+      {status !== "end" && question && (
+        <div className="flex flex-col items-center gap-3">
+          <h1 className="text-sm sm:text-base">
+            <b>{question.id} </b>
+            из {questions.length}
+          </h1>
+          <Progress
+            value={(question.id / questions.length) * 100}
+            className="w-full"
+          />
+        </div>
+      )}
+
       {status === null && question && (
         <>
-          <div className="flex flex-col items-center gap-3">
-            <h1 className="text-sm sm:text-base">
-              <b>{question.id} </b>
-              из {questions.length}
-            </h1>
-            <Progress
-              value={(question.id / questions.length) * 100}
-              className="w-full"
-            />
-          </div>
           <div>
             <Image
               alt="quiz"
@@ -211,29 +226,22 @@ export const Quiz = ({ t }: Props) => {
         </>
       )}
 
-      {status === "end" && !question && (
+      {status === "end" && (
         <Results
-          t={t}
-          count={
-            quiz.count !== user.count && quiz.isQuizEnded !== false
-              ? quiz.count
-              : user.count
+          result={
+            userId ? (quiz.isFinished ? user.count : user.prize) : user.count
           }
+          t={t}
         />
       )}
 
       {status === "correct" && (
-        <CorrectMessage
-          t={t}
-          setStatus={setStatus}
-          selectAnswerTitle={selectedAnswer?.title!}
-        />
+        <CorrectMessage t={t} selectAnswerTitle={selectedAnswer?.title!} />
       )}
 
       {status === "incorrect" && (
         <WrongMessage
           t={t}
-          setStatus={setStatus}
           selectAnswerTitle={selectedAnswer?.title!}
           correctTitle={correctAnswer!}
         />

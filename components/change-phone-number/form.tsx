@@ -7,10 +7,12 @@ import { useForm } from "react-hook-form";
 import { Form, FormControl, FormField, FormItem } from "../ui/form";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { useState } from "react";
+import { use, useState } from "react";
 import { useUserStore } from "@/stores/user";
 import { LoaderIcon } from "lucide-react";
 import { useQueryClient } from "react-query";
+import { useQuizStore } from "@/stores/quiz";
+import type { User } from "@/types";
 
 const formSchema = z.object({
   phone: z
@@ -33,6 +35,7 @@ export const ChangePhoneForm = ({ t, setOpen, setOpen1 }: Props) => {
   const queryClient = useQueryClient();
 
   const user = useUserStore();
+  const quiz = useQuizStore();
 
   const [loading, setLoading] = useState(false);
   const [state] = useState(() => user.phone);
@@ -50,6 +53,8 @@ export const ChangePhoneForm = ({ t, setOpen, setOpen1 }: Props) => {
     setLoading(true);
 
     let token = null;
+    let userData: User | null = null;
+    let attemptData: any | null = null;
 
     try {
       const { data } = await axios.post("/api/auth", { phone });
@@ -63,9 +68,43 @@ export const ChangePhoneForm = ({ t, setOpen, setOpen1 }: Props) => {
       const { data } = await axios.post("/api/validate", {
         token,
       });
-      user.initUser(data);
+      userData = data;
     } catch (err) {
       console.error(err);
+    }
+
+    const fetchAttempt = async () => {
+      if (!userData) return;
+      try {
+        const { data } = await queryClient.fetchQuery({
+          queryKey: ["attempt"],
+          queryFn: () => axios.get(`/api/attempt/${userData?.id}/${quiz.id}`),
+        });
+        attemptData = data;
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    await fetchAttempt();
+
+    if (userData) {
+      user.initUser(userData);
+    }
+
+    if (attemptData) {
+      quiz.initQuiz(attemptData.questions);
+      quiz.setIsFinished(attemptData.isFinished);
+      if (!attemptData.isFinished) {
+        quiz.initQuestionIndex(attemptData.lastQuestionIndex);
+        quiz.initQuestion();
+        quiz.nextQuestion();
+      } else {
+        quiz.resetQuestion();
+      }
+
+      user.setPrize(attemptData.count);
+      user.setCount(0);
     }
 
     setLoading(false);
@@ -85,7 +124,7 @@ export const ChangePhoneForm = ({ t, setOpen, setOpen1 }: Props) => {
                 <Input
                   type="tel"
                   readOnly={loading}
-                  // mask="+7 (999)-999-99-99"
+                  mask="+7 (999)-999-99-99"
                   placeholder="+7 (___)-___-__-__"
                   {...field}
                 />

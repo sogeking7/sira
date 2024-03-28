@@ -9,27 +9,19 @@ interface Props {
   t: any;
   selectAnswerTitle: string;
   correctTitle: string;
-  setStatus: (value: "end" | null) => void;
 }
 
-export const WrongMessage = ({
-  t,
-  selectAnswerTitle,
-  correctTitle,
-  setStatus,
-}: Props) => {
+export const WrongMessage = ({ t, selectAnswerTitle, correctTitle }: Props) => {
   const quiz = useQuizStore();
   const { id: userId } = useUserStore();
 
   const handleNextQuestion = () => {
-    if (userId) {
-      quiz.nextQuestion();
-    }
+    quiz.nextQuestion();
     if (quiz.isLastQuestion) {
-      setStatus("end");
+      quiz.setStatus("end");
       return;
     }
-    setStatus(null);
+    quiz.setStatus(null);
   };
   return (
     <div className="mb-[200px] mt-12">
@@ -52,7 +44,7 @@ export const WrongMessage = ({
         <Button
           className="mt-12 w-full"
           onClick={handleNextQuestion}
-          variant="outline"
+          variant={userId ? "default" : "outline"}
         >
           {quiz.isLastQuestion ? t.finish : t.nextQuestion}
         </Button>

@@ -1,5 +1,6 @@
 export const messages = {
   ru: {
+    phoneTaken: "Этот номер телефона уже занят",
     nav: {
       main: "Главная",
       donate: "Пожертвование",
@@ -68,6 +69,7 @@ export const messages = {
     },
   },
   kz: {
+    phoneTaken: "Бұл телефон нөмірі әлдеқашан алынған",
     nav: {
       main: "Басты бет",
       donate: "Садақа",
@@ -136,6 +138,7 @@ export const messages = {
     },
   },
   en: {
+    phoneTaken: "This phone number is already taken",
     nav: {
       main: "Home",
       donate: "Donate",

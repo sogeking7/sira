@@ -24,11 +24,19 @@ export async function POST(request: Request) {
   });
 
   if (!attempt || !attempt.selectedAnswers) {
-    const user = await prisma.user.findFirst({
+    let user = await prisma.user.findFirst({
       where: {
         phone,
       },
     });
+
+    if (!user) {
+      user = await prisma.user.create({
+        data: {
+          phone,
+        },
+      });
+    }
 
     const newAttempt = await prisma.attempt.create({
       data: {
@@ -79,7 +87,7 @@ export async function POST(request: Request) {
   }
 
   return Response.json(
-    { message: "This phone number is already taken" },
+    { type: "phone-taken", message: "This phone number is already taken" },
     { status: 400 },
   );
 }

@@ -10,11 +10,9 @@ interface Props {
 
 export const useAttempt = ({ user_id, quiz_id, onSuccess }: Props) => {
   return useQuery({
-    queryKey: ["attempt", user_id],
+    queryKey: ["attempt"],
     queryFn: async () => {
-      const { data, status } = await axios.get(
-        `/api/attempt/${user_id}/${quiz_id}`,
-      );
+      const { data } = await axios.get(`/api/attempt/${user_id}/${quiz_id}`);
       return data;
     },
     onSuccess,

@@ -1,11 +1,10 @@
 import { Logo } from "../logo";
-import { PrizeCounter } from "../prize-counter";
 import { MobileSidebar } from "./mobile-sidebar";
 import LocaleSwitcher from "../locale-switcher";
 import { useTranslations } from "next-intl";
 import { NavItem } from "@/types";
 import { Navigations } from "./navigations";
-import { useQuizStore } from "@/stores/quiz";
+import { PrizeCounterWrapper } from "../prize-counter/wrapper";
 
 export const Header = () => {
   const t = useTranslations("nav");
@@ -30,7 +29,7 @@ export const Header = () => {
       <div className="container mx-auto flex h-full items-center justify-between">
         <Logo />
         <div className="flex items-center gap-6 md:gap-10">
-          <PrizeCounter />
+          <PrizeCounterWrapper />
           <div className="max-md:!hidden">
             <Navigations links={links} />
           </div>

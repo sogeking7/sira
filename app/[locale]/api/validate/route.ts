@@ -6,12 +6,23 @@ export async function POST(request: Request) {
 
   const token = body.token;
 
-  const { payload } = await jwtVerify(token, getJwtSecretKey());
+  try {
+    const { payload } = await jwtVerify(token, getJwtSecretKey());
 
-  const data = {
-    id: payload.id,
-    phone: payload.phone,
-  };
+    const data = {
+      id: payload.id,
+      phone: payload.phone,
+    };
 
-  return Response.json(data);
+    return Response.json(data);
+  
+  } catch (error) {
+    console.error(error);
+    return Response.json(
+      { error: "Invalid token" },
+      {
+        status: 401,
+      },
+    );
+  }
 }

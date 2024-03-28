@@ -9,22 +9,19 @@ import { useUserStore } from "@/stores/user";
 interface Props {
   t: any;
   selectAnswerTitle: string;
-  setStatus: (value: "end" | null) => void;
 }
 
-export const CorrectMessage = ({ t, selectAnswerTitle, setStatus }: Props) => {
+export const CorrectMessage = ({ t, selectAnswerTitle }: Props) => {
   const quiz = useQuizStore();
   const { id: userId } = useUserStore();
 
   const handleNextQuestion = () => {
-    if (userId) {
-      quiz.nextQuestion();
-    }
+    quiz.nextQuestion();
     if (quiz.isLastQuestion) {
-      setStatus("end");
+      quiz.setStatus("end");
       return;
     }
-    setStatus(null);
+    quiz.setStatus(null);
   };
 
   return (
@@ -47,7 +44,7 @@ export const CorrectMessage = ({ t, selectAnswerTitle, setStatus }: Props) => {
           <Button
             className="w-full"
             onClick={handleNextQuestion}
-            variant="outline"
+            variant={userId ? "default" : "outline"}
           >
             {quiz.isLastQuestion ? t.finish : t.nextQuestion}
           </Button>

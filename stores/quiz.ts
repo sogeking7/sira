@@ -11,9 +11,9 @@ type Store = {
   collectedAnswers: any;
   questionIndex: number;
   isFinished: boolean;
-  count: number;
+  status: "correct" | "incorrect" | "end" | null;
   isQuizEnded: boolean | null;
-  incQuizCount: () => void;
+  setStatus: (status: "correct" | "incorrect" | "end" | null) => void;
   setIsFinished: (isFinished: boolean) => void;
   nextQuestion: () => void;
   initQuiz: (data: Question[]) => void;
@@ -37,14 +37,9 @@ export const useQuizStore = create<Store>()(
       isFinished: false,
       count: 0,
       isQuizEnded: null,
+      status: null,
+      setStatus: (status) => set({ status }),
       setIsQuizEnded: (isQuizEnded) => set({ isQuizEnded }),
-      incQuizCount: () => {
-        set((state) => {
-          return {
-            count: state.count + 1,
-          };
-        });
-      },
       resetQuestion: () => {
         set((state) => {
           if (state.questions) {
@@ -106,7 +101,7 @@ export const useQuizStore = create<Store>()(
           console.log("nextIndex", nextIndex);
           if (nextIndex === state.questions!.length) {
             return {
-              isFinished: true,
+              // isFinished: true,
               question: null,
               questionIndex: -1,
               isLastQuestion: false,

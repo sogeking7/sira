@@ -1,18 +1,27 @@
 import { Button } from "../ui/button";
 import { DonateButton } from "../donate-btn";
-import Link from "next/link";
 import Image from "next/image";
 import { useQuizStore } from "@/stores/quiz";
 import { useRouter } from "@/navigation";
+import { useUserStore } from "@/stores/user";
 
 interface Props {
   t: any;
-  count: number;
+  result: number;
 }
 
-export const Results = ({ t, count }: Props) => {
+export const Results = ({ t, result }: Props) => {
   const router = useRouter();
+
   const quiz = useQuizStore();
+  const user = useUserStore();
+
+  const handleGoHome = () => {
+    router.push("/");
+    quiz.setStatus(null);
+    quiz.resetQuestion();
+    user.setCount(0);
+  };
 
   return (
     <div className="mb-[200px] mt-12">
@@ -25,7 +34,7 @@ export const Results = ({ t, count }: Props) => {
           height={96}
           className="md:scale-x-[-1]"
         />
-        <h1 className="mt-2 text-[64px] font-bold text-primary">{count}</h1>
+        <h1 className="mt-2 text-[64px] font-bold text-primary">{result}</h1>
         <h1 className="mt-2 text-2xl font-bold leading-[30px] sm:text-[32px] sm:leading-[38px]">
           {t.congratulations}
         </h1>
@@ -38,10 +47,7 @@ export const Results = ({ t, count }: Props) => {
         <div className="mt-12 w-full space-y-4">
           <DonateButton text={t.kaspi} />
           <Button
-            onClick={() => {
-              router.push("/");
-              quiz.resetQuestion();
-            }}
+            onClick={handleGoHome}
             variant="outline"
             className="mt-3 w-full"
           >

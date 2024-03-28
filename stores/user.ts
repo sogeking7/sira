@@ -6,12 +6,13 @@ import { devtools } from "zustand/middleware";
 type Store = {
   id: User["id"] | null;
   phone: User["phone"] | null;
-  count: number;
-  foo: boolean;
-  setFoo: (foo: boolean) => void;
+  prize: number;
+  count: number,
+  incCount: () => void,
+  setCount: (count: number) => void,
   initUser: (user: User) => void;
-  incCount: () => void;
-  setCount: (count: number) => void;
+  incPrize: () => void;
+  setPrize: (prize: number) => void;
   fetchSaveAnswer: (
     user_id: User["id"] | null,
     quiz_id: Questionnaire["id"],
@@ -25,12 +26,13 @@ export const useUserStore = create<Store>()(
     return {
       id: null,
       phone: null,
+      prize: 0,
       count: 0,
-      foo: false,
-      setFoo: (foo) => set({ foo }),
-      initUser: (user) => set({ id: user.id, phone: user.phone }),
-      setCount: (count) => set({ count }),
       incCount: () => set((state) => ({ count: state.count + 1 })),
+      setCount: (count) => set({ count }),
+      initUser: (user) => set({ id: user.id, phone: user.phone }),
+      setPrize: (prize) => set({ prize }),
+      incPrize: () => set((state) => ({ prize: state.prize + 1 })),
       fetchSaveAnswer: (user_id, quiz_id, answer_id, question_id) =>
         axios.post(`/api/proceed`, {
           userId: user_id,
