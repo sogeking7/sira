@@ -52,9 +52,10 @@ export const SetPhoneForm = ({ t, setOpen, setOpen1, setShow }: Props) => {
     const { phone } = values;
     setLoading(true);
     setError("");
-    user.setFoo(true);
+    // user.setFoo(true);
 
     let token = null;
+    let userData = null;
 
     try {
       const { data } = await axios.post("/api/auth", { phone });
@@ -68,7 +69,7 @@ export const SetPhoneForm = ({ t, setOpen, setOpen1, setShow }: Props) => {
       const { data } = await axios.post("/api/validate", {
         token,
       });
-      user.initUser(data);
+      userData = data;
     } catch (err) {
       console.error(err);
     }
@@ -79,16 +80,22 @@ export const SetPhoneForm = ({ t, setOpen, setOpen1, setShow }: Props) => {
         quizId,
         collectedAnswers,
       });
+      user.initUser(userData);
       quiz.setIsFinished(data.isFinished);
-      quiz.initQuestionIndex(data.lastQuestionIndex);
+      if (!data.isFinished) {
+        quiz.initQuestionIndex(data.lastQuestionIndex);
+      } else {
+        quiz.resetQuestion();
+      }
       user.setCount(data.count);
       if (!user.foo) {
-        quiz.nextQuestion();
+        // quiz.nextQuestion();
+        console.log("FOO");
       }
     } catch (err) {
       console.error(err);
     }
-    
+
     setShow(false);
     setOpen(false);
     setOpen1(true);
@@ -107,7 +114,7 @@ export const SetPhoneForm = ({ t, setOpen, setOpen1, setShow }: Props) => {
                 <Input
                   type="tel"
                   readOnly={loading}
-                  mask="+7 (999)-999-99-99"
+                  // mask="+7 (999)-999-99-99"
                   placeholder="+7 (___)-___-__-__"
                   {...field}
                 />

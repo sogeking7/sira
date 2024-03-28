@@ -88,7 +88,7 @@ export const useQuizStore = create<Store>()(
       initQuestionIndex: (index) =>
         set((state) => {
           if (!state.questions) return {};
-          if (index === state.questions?.length - 1) {
+          if (index === state.questions?.length) {
             return {
               questionIndex: -1,
               isLastQuestion: false,
@@ -104,7 +104,7 @@ export const useQuizStore = create<Store>()(
         set((state) => {
           const nextIndex = state.questionIndex + 1;
           console.log("nextIndex", nextIndex);
-          if (nextIndex === state.questions!.length + 1) {
+          if (nextIndex === state.questions!.length) {
             return {
               isFinished: true,
               question: null,
@@ -113,7 +113,7 @@ export const useQuizStore = create<Store>()(
             };
           }
 
-          const isLastQuestion = nextIndex === state.questions!.length;
+          const isLastQuestion = nextIndex === state.questions!.length - 1;
 
           return {
             question: state.questions![nextIndex],

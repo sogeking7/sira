@@ -29,10 +29,15 @@ export const PrizeCounter = () => {
     quiz_id: quizId,
     onSuccess: (data) => {
       quiz.setIsFinished(data.isFinished);
-      quiz.initQuestionIndex(data.lastQuestionIndex);
+      if (!data.isFinished) {
+        quiz.initQuestionIndex(data.lastQuestionIndex);
+      } else {
+        quiz.resetQuestion();
+      }
       user.setCount(data.count);
       if (!user.foo) {
-        quiz.nextQuestion();
+        // quiz.nextQuestion();
+        console.log('FOO');
       }
     },
   });

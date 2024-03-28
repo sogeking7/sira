@@ -85,7 +85,7 @@ export const ChangePhoneForm = ({ t, setOpen, setOpen1 }: Props) => {
                 <Input
                   type="tel"
                   readOnly={loading}
-                  mask="+7 (999)-999-99-99"
+                  // mask="+7 (999)-999-99-99"
                   placeholder="+7 (___)-___-__-__"
                   {...field}
                 />

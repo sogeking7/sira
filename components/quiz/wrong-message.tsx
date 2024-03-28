@@ -2,6 +2,7 @@
 
 import { Button } from "../ui/button";
 import { useQuizStore } from "@/stores/quiz";
+import { useUserStore } from "@/stores/user";
 import Image from "next/image";
 
 interface Props {
@@ -17,10 +18,14 @@ export const WrongMessage = ({
   correctTitle,
   setStatus,
 }: Props) => {
-  const { isLastQuestion } = useQuizStore();
+  const quiz = useQuizStore();
+  const { id: userId } = useUserStore();
 
   const handleNextQuestion = () => {
-    if (isLastQuestion) {
+    if (userId) {
+      quiz.nextQuestion();
+    }
+    if (quiz.isLastQuestion) {
       setStatus("end");
       return;
     }
@@ -49,7 +54,7 @@ export const WrongMessage = ({
           onClick={handleNextQuestion}
           variant="outline"
         >
-          {isLastQuestion ? t.finish : t.nextQuestion}
+          {quiz.isLastQuestion ? t.finish : t.nextQuestion}
         </Button>
       </div>
     </div>

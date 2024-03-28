@@ -59,10 +59,15 @@ export const Quiz = ({ t }: Props) => {
     quiz_id: quizId,
     onSuccess: (data) => {
       quiz.setIsFinished(data.isFinished);
-      quiz.initQuestionIndex(data.lastQuestionIndex);
+      if (!data.isFinished) {
+        quiz.initQuestionIndex(data.lastQuestionIndex);
+      } else {
+        quiz.resetQuestion();
+      }
       user.setCount(data.count);
       if (!user.foo) {
-        quiz.nextQuestion();
+        // quiz.nextQuestion();
+        console.log("FOO");
       }
     },
   });
@@ -74,6 +79,8 @@ export const Quiz = ({ t }: Props) => {
     let saveAnswerStatus;
 
     console.log("userId", userId);
+    quiz.addCollectedAnswer(selectedAnswer);
+
     if (userId) {
       try {
         const { status } = await queryClient.fetchQuery({
@@ -104,10 +111,11 @@ export const Quiz = ({ t }: Props) => {
         user.incCount();
       }
       quiz.incQuizCount();
-      quiz.addCollectedAnswer(selectedAnswer);
     }
-    quiz.nextQuestion();
 
+    if (!userId) {
+      quiz.nextQuestion();
+    }
     setCorrectAnswer(data.title);
     setStatus(isCorrect ? "correct" : "incorrect");
     setIsOpen(false);
