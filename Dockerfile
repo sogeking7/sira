@@ -12,6 +12,7 @@ RUN pnpm install
 COPY . .
 
 RUN npx prisma generate && pnpm run build
+RUN npx prisma db push && npx prisma db seed
 
 EXPOSE 3000
 ENV PORT 3000
