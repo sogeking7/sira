@@ -83,7 +83,7 @@ export const Quiz = ({ t }: Props) => {
     if (!userId) {
       fetchQuiz();
     } else {
-      fetchAttempt();
+      quiz.questionIndex === -1 && fetchAttempt();
     }
   }, []);
 
