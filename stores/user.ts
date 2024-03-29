@@ -1,15 +1,15 @@
 import { Answer, Question, Questionnaire, User } from "@/types";
 import axios from "axios";
 import { create } from "zustand";
-import { devtools } from "zustand/middleware";
+// import { devtools } from "zustand/middleware";
 
 type Store = {
   id: User["id"] | null;
   phone: User["phone"] | null;
   prize: number;
-  count: number,
-  incCount: () => void,
-  setCount: (count: number) => void,
+  count: number;
+  incCount: () => void;
+  setCount: (count: number) => void;
   initUser: (user: User) => void;
   incPrize: () => void;
   setPrize: (prize: number) => void;
@@ -22,7 +22,8 @@ type Store = {
 };
 
 export const useUserStore = create<Store>()(
-  devtools((set) => {
+  // devtools(
+  (set) => {
     return {
       id: null,
       phone: null,
@@ -41,5 +42,6 @@ export const useUserStore = create<Store>()(
           questionId: question_id,
         }),
     };
-  }),
+  },
+  // ),
 );

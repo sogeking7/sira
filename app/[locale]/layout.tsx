@@ -7,6 +7,10 @@ interface Props {
   children: React.ReactNode;
 }
 
+export const metadata: Metadata = {
+  title: "Sira",
+};
+
 export default function LocaleLayout({ children }: Props) {
   return (
     <html>

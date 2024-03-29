@@ -1,7 +1,7 @@
 import { Answer, Question } from "@/types";
 import axios from "axios";
 import { create } from "zustand";
-import { devtools } from "zustand/middleware";
+// import { devtools } from "zustand/middleware";
 
 type Store = {
   id: number;
@@ -26,7 +26,8 @@ type Store = {
 };
 
 export const useQuizStore = create<Store>()(
-  devtools((set) => {
+  // devtools(
+  (set) => {
     return {
       id: 1,
       questions: null,
@@ -127,5 +128,6 @@ export const useQuizStore = create<Store>()(
         return data;
       },
     };
-  }),
+  },
+  // ),
 );
