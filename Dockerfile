@@ -3,6 +3,7 @@ FROM node:18-alpine
 WORKDIR /app
 
 RUN npm install --global pm2
+RUN npm install -g pnpm
 
 COPY package.json pnpm-lock.yaml ./
 
