@@ -6,7 +6,6 @@ const withNextIntl = require("next-intl/plugin")();
 
 const nextConfig = {
   reactStrictMode: true,
-  output: 'standalone'
 };
 
 module.exports = withNextIntl(nextConfig);

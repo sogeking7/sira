@@ -22,6 +22,7 @@ import { Answer } from "@/types";
 import { useUserStore } from "@/stores/user";
 import { Results } from "./results";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 interface Props {
   t: any;
@@ -29,6 +30,7 @@ interface Props {
 
 export const Quiz = ({ t }: Props) => {
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   const [selectedAnswer, setSelectedAnswer] = useState<Answer | null>(null);
   const [open, setIsOpen] = useState(false);
@@ -55,7 +57,7 @@ export const Quiz = ({ t }: Props) => {
         quiz.initQuiz(data);
         quiz.resetQuestion();
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     };
 
@@ -81,9 +83,13 @@ export const Quiz = ({ t }: Props) => {
     };
 
     if (!userId) {
-      fetchQuiz();
+      if (quiz.questionIndex === -1 && !questions) {
+        fetchQuiz();
+      }
     } else {
-      quiz.questionIndex === -1 && fetchAttempt();
+      if (quiz.questionIndex === -1 && !questions) {
+        fetchAttempt();
+      }
     }
   }, []);
 
@@ -93,7 +99,7 @@ export const Quiz = ({ t }: Props) => {
 
     let saveAnswerStatus;
 
-    console.log("userId", userId);
+    // console.log("userId", userId);
     quiz.addCollectedAnswer(selectedAnswer);
 
     if (userId) {

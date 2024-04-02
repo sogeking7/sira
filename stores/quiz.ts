@@ -99,7 +99,7 @@ export const useQuizStore = create<Store>()(
       nextQuestion: () =>
         set((state) => {
           const nextIndex = state.questionIndex + 1;
-          console.log("nextIndex", nextIndex);
+          // console.log("nextIndex", nextIndex);
           if (nextIndex === state.questions!.length) {
             return {
               // isFinished: true,
