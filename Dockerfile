@@ -6,11 +6,14 @@ RUN npm install --global pm2
 
 COPY package.json pnpm-lock.yaml ./
 
-RUN pnpm install
+RUN npm install
 
 COPY . .
 
-RUN npx prisma generate && pnpm run build
+RUN npx prisma generate
+RUN npx prisma db push
+RUN npx prisma db seed
+RUN npm run build
 
 EXPOSE 3000
 ENV PORT 3000
